@@ -1,0 +1,18 @@
+{
+	"service_slug": "configuration-rest",
+	"settings_service_addresses": "[\"localhost\"]",
+	"cache_num_conn": 1,
+	"cache_host_0": "localhost",
+	"cache_port_0": "6379",
+	"db_num_conn": 1,
+	"db_engine_0": "pg",
+	"db_host_0": "localhost",
+	"db_user_0": "postgres",
+	"db_pass_0": "postgres",
+	"db_name_0": "neural_display",
+	"msgBroker_host": "localhost",
+	"msgBroker_exchange": "first-infras",
+	"msgBroker_queue": "program-service-handler",
+	"msgBroker_username": "firstidea",
+	"msgBroker_password": "gennova"
+}
