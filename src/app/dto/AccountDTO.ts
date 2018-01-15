@@ -102,20 +102,26 @@ export class AccountDTO
 	 * Gets the UTC time when this model is last updated.
 	 */
 	public readonly updatedAt: Date = undefined;
+
+	/**
+	 * Gets the FK of Civilian Id.
+	 */
+	public readonly civilianId: BigSInt = undefined;
 }
 
 AccountDTO.validator = JoiModelValidator.create({
 	username: joi.string().min(1).max(100).required(),
-	password: joi.string().min(6).max(100).required(),
+	password: joi.string().min(6).max(255).required(),
 	loginAttempts: joi.number().optional(),
 	lastAttemptAt: joi.object().type(Date, 'Date').allow(null).optional(),
 	lastLoginAt: joi.object().type(Date, 'Date').allow(null).optional(),
 	lastLoginFrom: joi.string().min(7).max(45).allow(null).optional(),
 	unclockedAt: joi.object().type(Date, 'Date').allow(null).optional(),
-	status: joi.string().only(AccountStatus.ACTIVE, AccountStatus.BANNED, AccountStatus.DISABLED, AccountStatus.LOCKED).default(AccountStatus.ACTIVE).required(),
+	status: joi.string().only(AccountStatus.ACTIVE, AccountStatus.BANNED, AccountStatus.DISABLED, AccountStatus.LOCKED).default(AccountStatus.ACTIVE).optional(),
 	deletedAt: joi.object().type(Date, 'Date').allow(null).optional(),
 	createdAt: joi.object().type(Date, 'Date').optional(),
 	updatedAt: joi.object().type(Date, 'Date').optional(),
-}, isSupportTenancy);
+	civilianId: joi.number().required(),
+}, isSupportTenancy, false);
 
 AccountDTO.translator = new ModelAutoMapper(AccountDTO, AccountDTO.validator);

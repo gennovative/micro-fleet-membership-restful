@@ -1,5 +1,5 @@
 {
-	"service_slug": "configuration-rest",
+	"service_slug": "membership-rest",
 	"settings_service_addresses": "[\"localhost\"]",
 	"cache_num_conn": 1,
 	"cache_host_0": "localhost",
@@ -9,7 +9,7 @@
 	"db_host_0": "localhost",
 	"db_user_0": "postgres",
 	"db_pass_0": "postgres",
-	"db_name_0": "neural_display",
+	"db_name_0": "membership",
 	"msgBroker_host": "localhost",
 	"msgBroker_exchange": "first-infras",
 	"msgBroker_queue": "program-service-handler",

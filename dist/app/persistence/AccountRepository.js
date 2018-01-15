@@ -23,10 +23,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const scrypt = require("scrypt");
 const back_lib_common_util_1 = require("back-lib-common-util");
 const back_lib_persistence_1 = require("back-lib-persistence");
+const AccountDTO_1 = require("../dto/AccountDTO");
 const AccountEntity_1 = require("../entity/AccountEntity");
 let AccountRepository = class AccountRepository extends back_lib_persistence_1.RepositoryBase {
     constructor(dbConnector) {
         super(AccountEntity_1.AccountEntity, dbConnector);
+    }
+    /**
+     * @override
+     */
+    create(model, opts) {
+        const _super = name => super[name];
+        return __awaiter(this, void 0, void 0, function* () {
+            let passBuffer = yield this.hash(model.password);
+            let password = passBuffer.toString('base64');
+            console.log(password);
+            model = AccountDTO_1.AccountDTO.translator.merge(model, {
+                password
+            });
+            return yield _super("create").call(this, model, opts);
+        });
     }
     findByCredentials(username, password) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -35,9 +51,9 @@ let AccountRepository = class AccountRepository extends back_lib_persistence_1.R
                     .where('username', username)
                     .limit(1);
             });
-            let hashProm = this.hash(password);
-            let [account, targetHash] = yield Promise.all([queryProm, hashProm]);
-            let isMatched = yield this.verify(targetHash, account.password);
+            let [account] = yield Promise.all([queryProm]);
+            let isMatched = yield this.verify(account.password, password);
+            console.log('isMatched: ', isMatched);
             return (isMatched ? account : null);
         });
     }

@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const back_lib_common_util_1 = require("back-lib-common-util");
 const back_lib_common_web_1 = require("back-lib-common-web");
+const back_lib_id_generator_1 = require("back-lib-id-generator");
 const MicroServiceBase_1 = require("back-lib-foundation/dist/app/microservice/MicroServiceBase");
 const AccountRepository_1 = require("./persistence/AccountRepository");
 const Types_1 = require("./constants/Types");
@@ -21,6 +22,7 @@ class MembershipRestService extends MicroServiceBase_1.MicroServiceBase {
         // this.registerMessageBrokerAddOn();
         // this.registerMediateRpcCaller();
         this._depContainer.bind(Types_1.Types.ACCOUNT_REPO, AccountRepository_1.AccountRepository);
+        this._depContainer.bind(back_lib_id_generator_1.Types.ID_PROVIDER, back_lib_id_generator_1.IdProvider);
     }
     /**
      * @override

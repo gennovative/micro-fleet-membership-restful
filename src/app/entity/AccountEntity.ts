@@ -38,7 +38,6 @@ export class AccountEntity
 
 	public username: string = undefined;
 	public password: string = undefined;
-	public deviceUid: BigSInt = undefined;
 	public loginAttempts: number = undefined;
 	public lastAttemptAt: Date = undefined;
 	public lastLoginAt: Date = undefined;
@@ -48,6 +47,7 @@ export class AccountEntity
 	public deletedAt: Date = undefined;
 	public createdAt: Date = undefined;
 	public updatedAt: Date = undefined;
+	public civilianId:  BigSInt = undefined;
 }
 
 AccountEntity.translator = new ModelAutoMapper(AccountEntity);

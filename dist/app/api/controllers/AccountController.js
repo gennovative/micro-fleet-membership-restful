@@ -24,12 +24,15 @@ const express = require("express");
 const TrailsApp = require("trails");
 const back_lib_common_util_1 = require("back-lib-common-util");
 const back_lib_common_web_1 = require("back-lib-common-web");
+const back_lib_id_generator_1 = require("back-lib-id-generator");
+const AccountDTO_1 = require("../../dto/AccountDTO");
 const Types_1 = require("../../constants/Types");
 const { controller, action } = back_lib_common_web_1.decorators;
 let AccountController = class AccountController extends back_lib_common_web_1.RestCRUDControllerBase {
-    constructor(trailsApp, _repo) {
-        super(trailsApp);
+    constructor(trailsApp, _repo, _idGen) {
+        super(trailsApp, AccountDTO_1.AccountDTO);
         this._repo = _repo;
+        this._idGen = _idGen;
     }
     authenticate(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -42,16 +45,28 @@ let AccountController = class AccountController extends back_lib_common_web_1.Re
             return this.ok(res, account);
         });
     }
+    /**
+     * @override
+     */
+    doCreate(dto, req, res) {
+        dto = this.translator.merge(dto, {
+            id: this._idGen.nextBigInt().toString()
+        });
+        return this.repo.create(dto);
+    }
 };
 __decorate([
-    action('POST'),
+    action('POST', 'login'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], AccountController.prototype, "authenticate", null);
 AccountController = __decorate([
     back_lib_common_util_1.injectable(),
-    controller('program'),
+    controller('accounts'),
+    __param(0, back_lib_common_util_1.inject(back_lib_common_web_1.Types.TRAILS_APP)),
     __param(1, back_lib_common_util_1.inject(Types_1.Types.ACCOUNT_REPO)),
-    __metadata("design:paramtypes", [TrailsApp, Object])
+    __param(2, back_lib_common_util_1.inject(back_lib_id_generator_1.Types.ID_PROVIDER)),
+    __metadata("design:paramtypes", [TrailsApp, Object, back_lib_id_generator_1.IdProvider])
 ], AccountController);
+exports.AccountController = AccountController;

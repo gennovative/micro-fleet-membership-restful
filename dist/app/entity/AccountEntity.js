@@ -7,7 +7,6 @@ class AccountEntity extends back_lib_persistence_1.EntityBase {
         super(...arguments);
         this.username = undefined;
         this.password = undefined;
-        this.deviceUid = undefined;
         this.loginAttempts = undefined;
         this.lastAttemptAt = undefined;
         this.lastLoginAt = undefined;
@@ -17,6 +16,7 @@ class AccountEntity extends back_lib_persistence_1.EntityBase {
         this.deletedAt = undefined;
         this.createdAt = undefined;
         this.updatedAt = undefined;
+        this.civilianId = undefined;
     }
     /**
      * @override

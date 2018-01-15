@@ -5,6 +5,7 @@ import TrailsApp = require('trails');
 
 import { HandlerContainer } from 'back-lib-common-util';
 import { TrailsServerAddOn, Types as WT } from 'back-lib-common-web';
+import { Types as IT, IdProvider } from 'back-lib-id-generator';
 import { MicroServiceBase } from 'back-lib-foundation/dist/app/microservice/MicroServiceBase';
 
 import { IAccountRepository } from './interfaces/IAccountRepository';
@@ -29,6 +30,7 @@ class MembershipRestService extends MicroServiceBase {
 		// this.registerMessageBrokerAddOn();
 		// this.registerMediateRpcCaller();
 		this._depContainer.bind<IAccountRepository>(T.ACCOUNT_REPO, AccountRepository);
+		this._depContainer.bind<IdProvider>(IT.ID_PROVIDER, IdProvider);
 	}
 
 	/**
