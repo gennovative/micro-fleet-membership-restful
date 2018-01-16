@@ -35,9 +35,8 @@ let AccountRepository = class AccountRepository extends back_lib_persistence_1.R
     create(model, opts) {
         const _super = name => super[name];
         return __awaiter(this, void 0, void 0, function* () {
-            let passBuffer = yield this.hash(model.password);
-            let password = passBuffer.toString('base64');
-            console.log(password);
+            const passBuffer = yield this.hash(model.password);
+            const password = passBuffer.toString('base64');
             model = AccountDTO_1.AccountDTO.translator.merge(model, {
                 password
             });
@@ -51,10 +50,10 @@ let AccountRepository = class AccountRepository extends back_lib_persistence_1.R
                     .where('username', username)
                     .limit(1);
             });
-            let [account] = yield Promise.all([queryProm]);
-            let isMatched = yield this.verify(account.password, password);
-            console.log('isMatched: ', isMatched);
-            return (isMatched ? account : null);
+            const account = yield queryProm;
+            const passBuffer = Buffer.from(account[0].password, 'base64');
+            const isMatched = yield this.verify(passBuffer, password);
+            return (isMatched ? account[0] : null);
         });
     }
     hash(password) {
@@ -63,8 +62,8 @@ let AccountRepository = class AccountRepository extends back_lib_persistence_1.R
             return yield scrypt.kdf(password, params);
         });
     }
-    verify(hash, password) {
-        return scrypt.verifyKdf(hash, password);
+    verify(kdf, key) {
+        return scrypt.verifyKdf(kdf, key);
     }
 };
 AccountRepository = __decorate([

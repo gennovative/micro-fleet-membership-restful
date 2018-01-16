@@ -25,9 +25,8 @@ export class AccountRepository
 	 * @override
 	 */
 	public async create(model: AccountDTO, opts?): Promise<AccountDTO & AccountDTO[]> {
-		let passBuffer = await this.hash(model.password);
-		let password = passBuffer.toString('base64');
-		console.log(password);
+		const passBuffer = await this.hash(model.password);
+		const password = passBuffer.toString('base64');
 		model = AccountDTO.translator.merge(model, {
 			password
 		}) as AccountDTO;
@@ -40,10 +39,10 @@ export class AccountRepository
 				.where('username', username)
 				.limit(1);
 		});
-		let [account] = await Promise.all([queryProm]);
-		let isMatched = await this.verify(account.password, password);
-		console.log('isMatched: ', isMatched);
-		return (isMatched ? account : null);
+		const account = await queryProm;
+		const passBuffer = Buffer.from(account[0].password, 'base64');
+		const isMatched = await this.verify(passBuffer, password);
+		return (isMatched ? account[0] : null);
 	}
 
 
@@ -52,7 +51,7 @@ export class AccountRepository
 		return await scrypt.kdf(password, params);
 	}
 
-	private verify(hash: string, password: string): Promise<boolean> {
-		return scrypt.verifyKdf(hash, password);
+	private verify(kdf: Buffer, key: string): Promise<boolean> {
+		return scrypt.verifyKdf(kdf, key);
 	}
 }
