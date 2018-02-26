@@ -71,7 +71,7 @@ AccountController = __decorate([
     __param(1, back_lib_common_util_1.inject(Types_1.Types.ACCOUNT_REPO)),
     __param(2, back_lib_common_util_1.inject(back_lib_id_generator_1.Types.ID_PROVIDER)),
     __param(3, back_lib_common_util_1.inject(Types_2.Types.AUTH_ADDON)),
-    __metadata("design:paramtypes", [TrailsApp, Object, back_lib_id_generator_1.IdProvider,
-        AuthAddOn_1.AuthAddOn])
+    __metadata("design:paramtypes", [TrailsApp, Object, typeof (_a = typeof back_lib_id_generator_1.IdProvider !== "undefined" && back_lib_id_generator_1.IdProvider) === "function" && _a || Object, AuthAddOn_1.AuthAddOn])
 ], AccountController);
 exports.AccountController = AccountController;
+var _a;
