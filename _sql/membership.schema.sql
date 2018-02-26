@@ -103,7 +103,7 @@ ALTER TABLE "account_roles" OWNER TO "postgres";
 CREATE TABLE "accounts" (
     "id" bigint NOT NULL,
     "username" character varying(100) NOT NULL,
-    "password" character varying(100) NOT NULL,
+    "password" character varying(1000) NOT NULL,
     "login_attempts" integer NOT NULL,
     "last_attempt_at" timestamp without time zone,
     "last_login_at" timestamp without time zone,
@@ -136,6 +136,7 @@ CREATE TABLE "civilians" (
     "address_long" double precision,
     "marital_status" character varying(10),
     "city_id" bigint,
+	"deleted_at" timestamp without time zone,
     CONSTRAINT "marital_stauts_check" CHECK ((("marital_status")::"text" = ANY (ARRAY[('single'::character varying)::"text", ('married'::character varying)::"text", ('separated'::character varying)::"text", ('devorced'::character varying)::"text", ('widowed'::character varying)::"text"])))
 );
 

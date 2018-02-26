@@ -14,5 +14,6 @@
 	"msgBroker_exchange": "first-infras",
 	"msgBroker_queue": "program-service-handler",
 	"msgBroker_username": "firstidea",
-	"msgBroker_password": "gennova"
+	"msgBroker_password": "gennova",
+	"jwtSecret": "6KrCccge7y"
 }

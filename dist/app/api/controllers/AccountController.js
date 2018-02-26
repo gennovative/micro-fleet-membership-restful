@@ -27,17 +27,20 @@ const back_lib_common_web_1 = require("back-lib-common-web");
 const back_lib_id_generator_1 = require("back-lib-id-generator");
 const AccountDTO_1 = require("../../dto/AccountDTO");
 const Types_1 = require("../../constants/Types");
+const AuthAddOn_1 = require("../../auth/AuthAddOn");
+const Types_2 = require("../../auth/Types");
 const { controller, action } = back_lib_common_web_1.decorators;
 let AccountController = class AccountController extends back_lib_common_web_1.RestCRUDControllerBase {
-    constructor(trailsApp, _repo, _idGen) {
+    constructor(trailsApp, _repo, _idGen, _authAddon) {
         super(trailsApp, AccountDTO_1.AccountDTO);
         this._repo = _repo;
         this._idGen = _idGen;
+        this._authAddon = _authAddon;
     }
     authenticate(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             let body = req.body;
-            let account = this._repo.findByCredentials(body.username, body.password);
+            let account = yield this._authAddon.login(body.username, body.password);
             if (!account) {
                 return this.unauthorized(res);
             }
@@ -67,6 +70,8 @@ AccountController = __decorate([
     __param(0, back_lib_common_util_1.inject(back_lib_common_web_1.Types.TRAILS_APP)),
     __param(1, back_lib_common_util_1.inject(Types_1.Types.ACCOUNT_REPO)),
     __param(2, back_lib_common_util_1.inject(back_lib_id_generator_1.Types.ID_PROVIDER)),
-    __metadata("design:paramtypes", [TrailsApp, Object, back_lib_id_generator_1.IdProvider])
+    __param(3, back_lib_common_util_1.inject(Types_2.Types.AUTH_ADDON)),
+    __metadata("design:paramtypes", [TrailsApp, Object, back_lib_id_generator_1.IdProvider,
+        AuthAddOn_1.AuthAddOn])
 ], AccountController);
 exports.AccountController = AccountController;

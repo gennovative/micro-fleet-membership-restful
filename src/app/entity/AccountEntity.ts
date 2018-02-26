@@ -47,7 +47,7 @@ export class AccountEntity
 	public deletedAt: Date = undefined;
 	public createdAt: Date = undefined;
 	public updatedAt: Date = undefined;
-	public civilianId:  BigSInt = undefined;
+	// public civilianId: BigSInt = undefined;
 }
 
 AccountEntity.translator = new ModelAutoMapper(AccountEntity);

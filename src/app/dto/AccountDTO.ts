@@ -106,13 +106,13 @@ export class AccountDTO
 	/**
 	 * Gets the FK of Civilian Id.
 	 */
-	public readonly civilianId: BigSInt = undefined;
+	// public readonly civilianId: BigSInt = undefined;
 }
 
 AccountDTO.validator = JoiModelValidator.create({
 	username: joi.string().min(1).max(100).required(),
 	password: joi.string().min(6).max(255).required(),
-	loginAttempts: joi.number().optional(),
+	loginAttempts: joi.number().allow(null).optional(),
 	lastAttemptAt: joi.object().type(Date, 'Date').allow(null).optional(),
 	lastLoginAt: joi.object().type(Date, 'Date').allow(null).optional(),
 	lastLoginFrom: joi.string().min(7).max(45).allow(null).optional(),
@@ -121,7 +121,7 @@ AccountDTO.validator = JoiModelValidator.create({
 	deletedAt: joi.object().type(Date, 'Date').allow(null).optional(),
 	createdAt: joi.object().type(Date, 'Date').optional(),
 	updatedAt: joi.object().type(Date, 'Date').optional(),
-	civilianId: joi.number().required(),
+	// civilianId: joi.number().required(),
 }, isSupportTenancy, false);
 
 AccountDTO.translator = new ModelAutoMapper(AccountDTO, AccountDTO.validator);
