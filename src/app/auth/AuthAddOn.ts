@@ -61,14 +61,23 @@ export class AuthAddOn implements IServiceAddOn {
 	}
 
 	private initAccessToken(opts): void {
+		// `payload` is decrypted from Access token from header.
 		let strategy = new JwtStrategy(opts, (payload, done) => {
+			// TODO: 1. Validate payload object
+			// Optional: Log timestamp for statistics purpose
 			done(null, payload);
 		});
 		passport.use('jwt-access', strategy);
 	}
 
 	private initRefreshToken(opts): void {
+		// `payload` is decrypted from Refresh token from header.
 		let strategy = new JwtStrategy(opts, async (payload, done) => {
+			// 1. Validate payload property
+			// 2. Validate refresh token from db (exp)
+			// 3. Update token exp time
+			// 4. Return new payload
+
 			// let user = await this._accountRepo.findByPk(payload.id);
 			// //  = users[payload.id] || null;
 			// if (user) {
@@ -118,7 +127,7 @@ export class AuthAddOn implements IServiceAddOn {
 				this._configProvider.get('jwtSecret'), 
 				// Config
 				{
-					expiresIn: 60 * 30,
+					expiresIn: 10,
 					issuer: ISSUER,
 				},
 				// Callback

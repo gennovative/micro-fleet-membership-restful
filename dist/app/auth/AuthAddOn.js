@@ -61,13 +61,21 @@ let AuthAddOn = class AuthAddOn {
         return Promise.resolve();
     }
     initAccessToken(opts) {
+        // `payload` is decrypted from Access token from header.
         let strategy = new JwtStrategy(opts, (payload, done) => {
+            // TODO: 1. Validate payload object
+            // Optional: Log timestamp for statistics purpose
             done(null, payload);
         });
         passport.use('jwt-access', strategy);
     }
     initRefreshToken(opts) {
+        // `payload` is decrypted from Refresh token from header.
         let strategy = new JwtStrategy(opts, (payload, done) => __awaiter(this, void 0, void 0, function* () {
+            // 1. Validate payload property
+            // 2. Validate refresh token from db (exp)
+            // 3. Update token exp time
+            // 4. Return new payload
             // let user = await this._accountRepo.findByPk(payload.id);
             // //  = users[payload.id] || null;
             // if (user) {
@@ -116,7 +124,7 @@ let AuthAddOn = class AuthAddOn {
                 this._configProvider.get('jwtSecret'), 
                 // Config
                 {
-                    expiresIn: 60 * 30,
+                    expiresIn: 10,
                     issuer: ISSUER,
                 }, 
                 // Callback
