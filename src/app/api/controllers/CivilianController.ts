@@ -5,11 +5,11 @@ import { injectable, inject, unmanaged, Guard, IDependencyContainer, Types as Cm
 import { SettingItem, SettingItemDataType } from 'back-lib-common-contracts';
 import { RestCRUDControllerBase, decorators, Types as WT } from 'back-lib-common-web';
 import { IdProvider, Types as IT } from 'back-lib-id-generator';
+import { AuthFilter } from 'back-lib-common-web/dist/app/filters/AuthFilter';
 
 import { CivilianDTO } from '../../dto/CivilianDTO';
 import { Types as T } from '../../constants/Types';
 import { ICivilianRepository } from '../../interfaces/ICivilianRepository';
-import { AuthFilter } from '../../auth/AuthFilter';
 
 const { controller, action, filter } = decorators;
 

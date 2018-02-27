@@ -4,7 +4,7 @@ import 'reflect-metadata';
 import TrailsApp = require('trails');
 
 import { HandlerContainer } from 'back-lib-common-util';
-import { TrailsServerAddOn, Types as WT } from 'back-lib-common-web';
+import { TrailsServerAddOn, AuthAddOn, Types as WT } from 'back-lib-common-web';
 import { Types as IT, IdProvider } from 'back-lib-id-generator';
 import { MicroServiceBase } from 'back-lib-foundation/dist/app/microservice/MicroServiceBase';
 
@@ -14,9 +14,6 @@ import { Types as T } from './constants/Types';
 import { IAccountRepository } from './interfaces/IAccountRepository';
 import { ICivilianRepository } from './interfaces/ICivilianRepository';
 
-// TODO: Should move this addon to common-web
-import { AuthAddOn } from './auth/AuthAddOn';
-import { Types as aT } from './auth/Types';
 
 class MembershipRestService extends MicroServiceBase {
 
@@ -32,7 +29,7 @@ class MembershipRestService extends MicroServiceBase {
 		this.registerTrailsAddOn();
 		this.registerDbAddOn();
 
-		this._depContainer.bind<AuthAddOn>(aT.AUTH_ADDON, AuthAddOn).asSingleton();
+		this._depContainer.bind<AuthAddOn>(WT.AUTH_ADDON, AuthAddOn).asSingleton();
 
 		// this.registerMessageBrokerAddOn();
 		// this.registerMediateRpcCaller();
@@ -58,7 +55,7 @@ class MembershipRestService extends MicroServiceBase {
 		trails.pathPrefix = '/api/v1';
 		// trails.addFilter(TestFilter, f => f.sayHi);
 
-		const authAddon = this._depContainer.resolve<AuthAddOn>(aT.AUTH_ADDON);
+		const authAddon = this._depContainer.resolve<AuthAddOn>(WT.AUTH_ADDON);
 		this.attachAddOn(authAddon);
 	}
 

@@ -16,9 +16,9 @@ const TrailsApp = require("trails");
 const back_lib_common_util_1 = require("back-lib-common-util");
 const back_lib_common_web_1 = require("back-lib-common-web");
 const back_lib_id_generator_1 = require("back-lib-id-generator");
+const AuthFilter_1 = require("back-lib-common-web/dist/app/filters/AuthFilter");
 const CivilianDTO_1 = require("../../dto/CivilianDTO");
 const Types_1 = require("../../constants/Types");
-const AuthFilter_1 = require("../../auth/AuthFilter");
 const { controller, action, filter } = back_lib_common_web_1.decorators;
 let CivilianController = class CivilianController extends back_lib_common_web_1.RestCRUDControllerBase {
     constructor(trailsApp, _repo, _idGen) {
