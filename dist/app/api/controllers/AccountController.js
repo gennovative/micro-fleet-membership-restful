@@ -55,9 +55,9 @@ let AccountController = class AccountController extends back_lib_common_web_1.Re
                 if (loggedAccount) {
                     return this.ok(res, {
                         id: account.id,
-                        username: account.username,
-                        token: token,
+                        // username: account.username,
                         role: account.role,
+                        token: token,
                         refreshToken: refreshToken
                     });
                 }
@@ -97,7 +97,7 @@ __decorate([
 ], AccountController.prototype, "authenticate", null);
 __decorate([
     action('POST', 'refresh-token'),
-    filter(AuthFilter_1.AuthFilter, f => f.refreshGuard),
+    filter(AuthFilter_1.AuthFilter, f => f.guard),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
