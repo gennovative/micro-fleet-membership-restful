@@ -15,5 +15,6 @@
 	"msgBroker_queue": "program-service-handler",
 	"msgBroker_username": "firstidea",
 	"msgBroker_password": "gennova",
-	"jwtSecret": "6KrCccge7y"
+	"jwtSecret": "6KrCccge7y",
+	"jwtIssuer": "http://localhost:3000"
 }

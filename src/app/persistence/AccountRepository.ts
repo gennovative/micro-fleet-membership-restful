@@ -2,13 +2,10 @@ import { QueryBuilder } from 'objection';
 import * as scrypt from 'scrypt';
 import { inject, injectable, Guard } from 'back-lib-common-util';
 import { RepositoryBase, IDatabaseConnector, Types as PerTypes } from 'back-lib-persistence';
+import { AccountDTO, IAccountRepository } from 'back-lib-membership-contracts';
 
-import { AccountDTO } from '../dto/AccountDTO';
-import { IAccountRepository } from '../interfaces/IAccountRepository';
 import { AccountEntity } from '../entity/AccountEntity';
 import { isMaster } from 'cluster';
-
-
 
 @injectable()
 export class AccountRepository
@@ -35,9 +32,11 @@ export class AccountRepository
 
 	public async findByCredentials(username: string, password: string): Promise<AccountDTO> {
 		let queryProm: Promise<AccountDTO> = this._processor.executeQuery((builder: QueryBuilder<AccountDTO>) => {
-			return builder
+			let query = builder
 				.where('username', username)
 				.limit(1);
+				// console.log(query.toSQL());
+				return query;
 		});
 		const account = await queryProm;
 		const passBuffer = Buffer.from(account[0].password, 'base64');

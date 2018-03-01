@@ -16,15 +16,18 @@ const TrailsApp = require("trails");
 const back_lib_common_util_1 = require("back-lib-common-util");
 const back_lib_common_web_1 = require("back-lib-common-web");
 const back_lib_id_generator_1 = require("back-lib-id-generator");
-const AuthFilter_1 = require("back-lib-common-web/dist/app/filters/AuthFilter");
-const back_lib_membership_contracts_1 = require("back-lib-membership-contracts");
+// import { ICivilianRepository, CivilianDTO, Types as T } from 'back-lib-membership-contracts';
+const RoleDTO_1 = require("../../dto/RoleDTO");
 // import { CivilianDTO } from '../../dto/CivilianDTO';
 // import { Types as T } from '../../constants/Types';
 // import { ICivilianRepository } from '../../interfaces/ICivilianRepository';
 const { controller, action, filter } = back_lib_common_web_1.decorators;
-let CivilianController = class CivilianController extends back_lib_common_web_1.RestCRUDControllerBase {
+const ROLE_REPO = 'membership.IRoleRepository';
+let RoleController = 
+// @filter(AuthFilter, f => f.guard)
+class RoleController extends back_lib_common_web_1.RestCRUDControllerBase {
     constructor(trailsApp, _repo, _idGen) {
-        super(trailsApp, back_lib_membership_contracts_1.CivilianDTO);
+        super(trailsApp, RoleDTO_1.RoleDTO);
         this._repo = _repo;
         this._idGen = _idGen;
     }
@@ -48,13 +51,14 @@ let CivilianController = class CivilianController extends back_lib_common_web_1.
         return this.repo.create(dto);
     }
 };
-CivilianController = __decorate([
+RoleController = __decorate([
     back_lib_common_util_1.injectable(),
-    controller('civilians'),
-    filter(AuthFilter_1.AuthFilter, f => f.guard),
+    controller('roles')
+    // @filter(AuthFilter, f => f.guard)
+    ,
     __param(0, back_lib_common_util_1.inject(back_lib_common_web_1.Types.TRAILS_APP)),
-    __param(1, back_lib_common_util_1.inject(back_lib_membership_contracts_1.Types.CIVILIAN_REPO)),
+    __param(1, back_lib_common_util_1.inject(ROLE_REPO)),
     __param(2, back_lib_common_util_1.inject(back_lib_id_generator_1.Types.ID_PROVIDER)),
     __metadata("design:paramtypes", [TrailsApp, Object, back_lib_id_generator_1.IdProvider])
-], CivilianController);
-exports.CivilianController = CivilianController;
+], RoleController);
+exports.RoleController = RoleController;

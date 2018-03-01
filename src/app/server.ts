@@ -4,19 +4,19 @@ import 'reflect-metadata';
 import TrailsApp = require('trails');
 
 import { HandlerContainer } from 'back-lib-common-util';
-import { TrailsServerAddOn, Types as WT } from 'back-lib-common-web';
+import { TrailsServerAddOn, AuthAddOn, Types as WT } from 'back-lib-common-web';
 import { Types as IT, IdProvider } from 'back-lib-id-generator';
 import { MicroServiceBase } from 'back-lib-foundation/dist/app/microservice/MicroServiceBase';
 
 import { AccountRepository } from './persistence/AccountRepository';
 import { CivilianRepository } from './persistence/CivilianRepository';
-import { Types as T } from './constants/Types';
-import { IAccountRepository } from './interfaces/IAccountRepository';
-import { ICivilianRepository } from './interfaces/ICivilianRepository';
+// import { Types as T } from './constants/Types';
+import { IAccountRepository, ICivilianRepository, Types as T } from 'back-lib-membership-contracts';
+import { IRoleRepository } from './interfaces/IRoleRepository';
+import { RoleRepository } from './persistence/RoleRepository';
 
-// TODO: Should move this addon to common-web
-import { AuthAddOn } from './auth/AuthAddOn';
-import { Types as aT } from './auth/Types';
+const ROLE_REPO = 'membership.IRoleRepository';
+
 
 class MembershipRestService extends MicroServiceBase {
 
@@ -32,12 +32,13 @@ class MembershipRestService extends MicroServiceBase {
 		this.registerTrailsAddOn();
 		this.registerDbAddOn();
 
-		this._depContainer.bind<AuthAddOn>(aT.AUTH_ADDON, AuthAddOn).asSingleton();
+		this._depContainer.bind<AuthAddOn>(WT.AUTH_ADDON, AuthAddOn).asSingleton();
 
 		// this.registerMessageBrokerAddOn();
 		// this.registerMediateRpcCaller();
 		this._depContainer.bind<IAccountRepository>(T.ACCOUNT_REPO, AccountRepository);
 		this._depContainer.bind<ICivilianRepository>(T.CIVILIAN_REPO, CivilianRepository);
+		this._depContainer.bind<IRoleRepository>(ROLE_REPO, RoleRepository);
 		this._depContainer.bind<IdProvider>(IT.ID_PROVIDER, IdProvider);
 	}
 
@@ -58,7 +59,7 @@ class MembershipRestService extends MicroServiceBase {
 		trails.pathPrefix = '/api/v1';
 		// trails.addFilter(TestFilter, f => f.sayHi);
 
-		const authAddon = this._depContainer.resolve<AuthAddOn>(aT.AUTH_ADDON);
+		const authAddon = this._depContainer.resolve<AuthAddOn>(WT.AUTH_ADDON);
 		this.attachAddOn(authAddon);
 	}
 

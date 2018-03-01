@@ -3,8 +3,7 @@ import * as scrypt from 'scrypt';
 import { inject, injectable, Guard } from 'back-lib-common-util';
 import { RepositoryBase, IDatabaseConnector, Types as PerTypes } from 'back-lib-persistence';
 
-import { CivilianDTO } from '../dto/CivilianDTO';
-import { ICivilianRepository } from '../interfaces/ICivilianRepository';
+import { CivilianDTO, ICivilianRepository } from 'back-lib-membership-contracts';
 import { CivilianEntity } from '../entity/CivilianEntity';
 import { isMaster } from 'cluster';
 
@@ -14,10 +13,10 @@ import { isMaster } from 'cluster';
 export class CivilianRepository
 	extends RepositoryBase<CivilianEntity, CivilianDTO>
 	implements ICivilianRepository {
-	
+
 	constructor(
 		@inject(PerTypes.DB_CONNECTOR) dbConnector: IDatabaseConnector,
-		) {
+	) {
 		super(CivilianEntity, dbConnector);
 	}
 

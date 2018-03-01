@@ -23,7 +23,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const scrypt = require("scrypt");
 const back_lib_common_util_1 = require("back-lib-common-util");
 const back_lib_persistence_1 = require("back-lib-persistence");
-const AccountDTO_1 = require("../dto/AccountDTO");
+const back_lib_membership_contracts_1 = require("back-lib-membership-contracts");
 const AccountEntity_1 = require("../entity/AccountEntity");
 let AccountRepository = class AccountRepository extends back_lib_persistence_1.RepositoryBase {
     constructor(dbConnector) {
@@ -37,7 +37,7 @@ let AccountRepository = class AccountRepository extends back_lib_persistence_1.R
         return __awaiter(this, void 0, void 0, function* () {
             const passBuffer = yield this.hash(model.password);
             const password = passBuffer.toString('base64');
-            model = AccountDTO_1.AccountDTO.translator.merge(model, {
+            model = back_lib_membership_contracts_1.AccountDTO.translator.merge(model, {
                 password
             });
             return yield _super("create").call(this, model, opts);
@@ -46,9 +46,11 @@ let AccountRepository = class AccountRepository extends back_lib_persistence_1.R
     findByCredentials(username, password) {
         return __awaiter(this, void 0, void 0, function* () {
             let queryProm = this._processor.executeQuery((builder) => {
-                return builder
+                let query = builder
                     .where('username', username)
                     .limit(1);
+                // console.log(query.toSQL());
+                return query;
             });
             const account = yield queryProm;
             const passBuffer = Buffer.from(account[0].password, 'base64');

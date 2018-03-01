@@ -6,7 +6,9 @@ import { SettingItem, SettingItemDataType } from 'back-lib-common-contracts';
 import { RestCRUDControllerBase, decorators, Types as WT } from 'back-lib-common-web';
 import { IdProvider, Types as IT } from 'back-lib-id-generator';
 import { AuthFilter } from 'back-lib-common-web/dist/app/filters/AuthFilter';
-import { ICivilianRepository, CivilianDTO, Types as T } from 'back-lib-membership-contracts';
+// import { ICivilianRepository, CivilianDTO, Types as T } from 'back-lib-membership-contracts';
+import { RoleDTO } from '../../dto/RoleDTO';
+import { IRoleRepository } from '../../interfaces/IRoleRepository';
 
 // import { CivilianDTO } from '../../dto/CivilianDTO';
 // import { Types as T } from '../../constants/Types';
@@ -14,18 +16,19 @@ import { ICivilianRepository, CivilianDTO, Types as T } from 'back-lib-membershi
 
 const { controller, action, filter } = decorators;
 
+const ROLE_REPO = 'membership.IRoleRepository';
 
 @injectable()
-@controller('civilians')
-@filter(AuthFilter, f => f.guard)
-export class CivilianController extends RestCRUDControllerBase<CivilianDTO> {
+@controller('roles')
+// @filter(AuthFilter, f => f.guard)
+export class RoleController extends RestCRUDControllerBase<RoleDTO> {
 
 	constructor(
 		@inject(WT.TRAILS_APP) trailsApp: TrailsApp,
-		@inject(T.CIVILIAN_REPO) private _repo: ICivilianRepository,
+		@inject(ROLE_REPO) private _repo: IRoleRepository,
 		@inject(IT.ID_PROVIDER) private _idGen: IdProvider,
 	) {
-		super(trailsApp, CivilianDTO);
+		super(trailsApp, RoleDTO);
 	}
 
 	// @action('POST', 'login')
@@ -42,10 +45,10 @@ export class CivilianController extends RestCRUDControllerBase<CivilianDTO> {
 	/**
 	 * @override
 	 */
-	protected doCreate(dto: CivilianDTO, req: express.Request, res: express.Response): Promise<CivilianDTO & CivilianDTO[]> {
+	protected doCreate(dto: RoleDTO, req: express.Request, res: express.Response): Promise<RoleDTO & RoleDTO[]> {
 		dto = this.translator.merge(dto, {
 			id: this._idGen.nextBigInt().toString()
-		}) as CivilianDTO;
+		}) as RoleDTO;
 		return this.repo.create(dto);
 	}
 }

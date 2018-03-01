@@ -47,6 +47,7 @@ export class AccountEntity
 	public deletedAt: Date = undefined;
 	public createdAt: Date = undefined;
 	public updatedAt: Date = undefined;
+	public roleId: BigSInt = undefined;
 	// public civilianId: BigSInt = undefined;
 }
 

@@ -9,7 +9,7 @@
 
 import { HandlerContainer } from 'back-lib-common-util';
 import { RestCRUDControllerBase } from 'back-lib-common-web';
-import { Types as T } from '../constants/Types';
+import { Types as T } from 'back-lib-membership-contracts';
 
 const PATH_PREFIX = '/api/v1';
 

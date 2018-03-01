@@ -11,7 +11,7 @@
  */
 
 import { HandlerContainer } from 'back-lib-common-util';
-import { Types as T } from '../constants/Types';
+import { Types as T } from 'back-lib-membership-contracts';
 
 
 const container = HandlerContainer.instance;

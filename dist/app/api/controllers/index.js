@@ -5,3 +5,4 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./AccountController"));
 __export(require("./CivilianController"));
+__export(require("./RoleController"));

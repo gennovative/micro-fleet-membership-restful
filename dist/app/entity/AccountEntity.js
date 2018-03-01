@@ -16,6 +16,7 @@ class AccountEntity extends back_lib_persistence_1.EntityBase {
         this.deletedAt = undefined;
         this.createdAt = undefined;
         this.updatedAt = undefined;
+        this.roleId = undefined;
         // public civilianId: BigSInt = undefined;
     }
     /**
