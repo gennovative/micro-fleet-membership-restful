@@ -11,9 +11,10 @@ import { IdProvider, Types as IT } from 'back-lib-id-generator';
 import { IAccountRepository, AccountDTO, Types as T } from 'back-lib-membership-contracts';
 import { AccountRepository } from '../../persistence/AccountRepository';
 import { IRoleRepository } from '../../interfaces/IRoleRepository';
+import { AuthFilter } from 'back-lib-common-web/dist/app/filters/AuthFilter';
 // import { Types as T } from '../../constants/Types';
 
-const { controller, action } = decorators;
+const { controller, action, filter } = decorators;
 const ROLE_REPO = 'membership.IRoleRepository';
 
 
@@ -35,14 +36,40 @@ export class AccountController extends RestCRUDControllerBase<AccountDTO> {
 	public async authenticate(req: express.Request, res: express.Response) {
 		let body = req.body;
 		let account = await this._repo.findByCredentials(body.username, body.password);
-		let role = await this._roleRepo.findByPk(account.roleId);
 		if (account) {
-			let token = await this._authAddon.createToken(account);
-			// let refreshToken = await this._authAddon.createToken(account);
-			return this.ok(res, { token: token, role: role.name });
+			let [token, refreshToken] = await Promise.all([
+				this._authAddon.createToken(account, false),
+				this._authAddon.createToken(account, true)
+			]);
+			// let token = await this._authAddon.createToken(account, false);
+			// let refreshToken = await this._authAddon.createToken(account, true);
+			let loggedAccount = await this._repo.patch({ id: account.id, refreshToken: refreshToken });
+			if (loggedAccount) {
+				return this.ok(res, {
+					id: account.id,
+					// username: account.username,
+					role: account.role,
+					token: token,
+					refreshToken: refreshToken
+				});
+			}
+			return this.internalError(res, 'An error occured!');
 		}
 		return this.unauthorized(res);
 		//TODO: Should return only username, fullname and roles.
+	}
+
+	@action('POST', 'refresh-token')
+	@filter(AuthFilter, f => f.guard)
+	public async refreshToken(req: express.Request, res: express.Response) {
+		let refreshToken = req.body.refreshToken;
+		let checkToken = await this._repo.checkRefresh(req.params['accountId'], refreshToken);
+		let account = {
+			id: req.params['accountId'],
+			username: req.params['username'],
+		};
+		let token = await this._authAddon.createToken(account, false);
+		return this.ok(res, { token: token });
 	}
 
 	/**

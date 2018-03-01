@@ -48,6 +48,8 @@ export class AccountEntity
 	public createdAt: Date = undefined;
 	public updatedAt: Date = undefined;
 	public roleId: BigSInt = undefined;
+	public refreshToken: string = undefined;
+	public tokenExp: Date = undefined;
 	// public civilianId: BigSInt = undefined;
 }
 
