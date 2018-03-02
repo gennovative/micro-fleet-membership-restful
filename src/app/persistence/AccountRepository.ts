@@ -23,12 +23,25 @@ export class AccountRepository
 	 * @override
 	 */
 	public async create(model: AccountDTO, opts?): Promise<AccountDTO & AccountDTO[]> {
-		const passBuffer = await this.hash(model.password);
-		const password = passBuffer.toString('base64');
-		model = AccountDTO.translator.merge(model, {
-			password
-		}) as AccountDTO;
-		return await super.create(model, opts);
+		let queryProm: Promise<AccountEntity> = this._processor.executeQuery((builder: QueryBuilder<any>) => {
+			let query = builder
+				.select('accounts.*', 'account_roles.name as role')
+				.leftOuterJoin('account_roles', 'accounts.role_id', 'account_roles.id')
+				.where('username', model.username)
+				.limit(1);
+			// console.log(query.toSQL());
+			return query;
+		});
+		let account = await queryProm;
+		if (account[0]) {
+			const passBuffer = await this.hash(model.password);
+			const password = passBuffer.toString('base64');
+			model = AccountDTO.translator.merge(model, {
+				password
+			}) as AccountDTO;
+			return await super.create(model, opts);
+		}
+		return null;
 	}
 
 	public async findByCredentials(username: string, password: string): Promise<AccountDTO> {

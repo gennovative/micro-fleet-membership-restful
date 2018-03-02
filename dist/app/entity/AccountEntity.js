@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const objection_1 = require("objection");
 const back_lib_persistence_1 = require("back-lib-persistence");
 const back_lib_common_contracts_1 = require("back-lib-common-contracts");
 class AccountEntity extends back_lib_persistence_1.EntityBase {
@@ -21,6 +22,21 @@ class AccountEntity extends back_lib_persistence_1.EntityBase {
         this.tokenExp = undefined;
         // public civilianId: BigSInt = undefined;
     }
+    static get relationMappings() {
+        // Lazy reference to avoid circular reference.
+        // `relationMappings()` is called only once for each connection.
+        const { RoleEntity } = require('../entity/RoleEntity');
+        return {
+            belongtoRoles: {
+                relation: objection_1.Model.HasOneRelation,
+                modelClass: RoleEntity,
+                join: {
+                    from: 'public.accounts.role_id',
+                    to: 'public.account_roles.id'
+                }
+            }
+        };
+    }
     /**
      * @override
      */
@@ -28,21 +44,6 @@ class AccountEntity extends back_lib_persistence_1.EntityBase {
         return AccountEntity.TABLE_NAME;
     }
 }
-// public static get relationMappings(): any {
-// 	// Lazy reference to avoid circular reference.
-// 	// `relationMappings()` is called only once for each connection.
-// 	const { DeviceGroupEntity } = require('../entity/DeviceGroupEntity');
-// 	return {
-// 		belongtoDeviceGroups: {
-// 			relation: Model.HasOneRelation,
-// 			modelClass: DeviceGroupEntity,
-// 			join: {
-// 				from: 'public.devices.group_id',
-// 				to: 'public.device_groups.id'
-// 			}
-// 		}
-// 	};
-// }
 AccountEntity.TABLE_NAME = 'public.accounts';
 exports.AccountEntity = AccountEntity;
 AccountEntity.translator = new back_lib_common_contracts_1.ModelAutoMapper(AccountEntity);

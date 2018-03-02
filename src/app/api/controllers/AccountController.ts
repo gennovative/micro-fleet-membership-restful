@@ -63,9 +63,10 @@ export class AccountController extends RestCRUDControllerBase<AccountDTO> {
 	@filter(AuthFilter, f => f.guard)
 	public async refreshToken(req: express.Request, res: express.Response) {
 		let refreshToken = req.body.refreshToken;
-		let checkToken = await this._repo.checkRefresh(req.params['accountId'], refreshToken);
+		let accountId = req.params['accountId'];
+		let checkToken = await this._repo.checkRefresh(accountId, refreshToken);
 		let account = {
-			id: req.params['accountId'],
+			id: accountId,
 			username: req.params['username'],
 		};
 		let token = await this._authAddon.createToken(account, false);

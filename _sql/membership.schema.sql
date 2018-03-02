@@ -113,6 +113,9 @@ CREATE TABLE "accounts" (
     "deleted_at" timestamp without time zone,
     "created_at" timestamp without time zone,
     "updated_at" timestamp without time zone,
+	"role_id" bigint,
+	"refresh_token" character varying(255),
+	"token_exp" timestamp without time zone,
     CONSTRAINT "status_check" CHECK ((("status")::"text" = ANY (ARRAY[('active'::character varying)::"text", ('disabled'::character varying)::"text", ('locked'::character varying)::"text", ('banned'::character varying)::"text"])))
 );
 
@@ -196,6 +199,12 @@ ALTER TABLE ONLY "account_privilege"
 ALTER TABLE ONLY "account_privilege"
     ADD CONSTRAINT "account_privilege_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "account_roles"("id");
 
+--
+-- TOC entry 2024 (class 2606 OID 32783)
+-- Name: accounts accounts_role_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+ALTER TABLE ONLY "accounts"
+    ADD CONSTRAINT "accounts_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "account_roles"("id");
 
 -- Completed on 2018-01-11 22:17:50
 
