@@ -56,11 +56,14 @@ let AccountRepository = class AccountRepository extends back_lib_persistence_1.R
                 return query;
             });
             const account = yield queryProm;
-            const passBuffer = Buffer.from(account[0].password, 'base64');
-            const isMatched = yield this.verify(passBuffer, password);
-            let accoutnDto = this._processor.toDTO(account[0], false);
-            accoutnDto.role = account[0]['role'];
-            return (isMatched ? accoutnDto : null);
+            if (account[0]) {
+                const passBuffer = Buffer.from(account[0].password, 'base64');
+                const isMatched = yield this.verify(passBuffer, password);
+                let accoutnDto = this._processor.toDTO(account[0], false);
+                accoutnDto.role = account[0]['role'];
+                return (isMatched ? accoutnDto : null);
+            }
+            return null;
         });
     }
     checkRefresh(id, refreshToken) {

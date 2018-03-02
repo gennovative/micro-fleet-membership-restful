@@ -10,7 +10,7 @@ import { IdProvider, Types as IT } from 'back-lib-id-generator';
 // import { IAccountRepository } from '../../interfaces/IAccountRepository';
 import { IAccountRepository, AccountDTO, Types as T } from 'back-lib-membership-contracts';
 import { AccountRepository } from '../../persistence/AccountRepository';
-import { IRoleRepository } from '../../interfaces/IRoleRepository';
+// import { IRoleRepository } from '../../interfaces/IRoleRepository';
 import { AuthFilter } from 'back-lib-common-web/dist/app/filters/AuthFilter';
 // import { Types as T } from '../../constants/Types';
 
@@ -25,7 +25,7 @@ export class AccountController extends RestCRUDControllerBase<AccountDTO> {
 	constructor(
 		@inject(WT.TRAILS_APP) trailsApp: TrailsApp,
 		@inject(T.ACCOUNT_REPO) private _repo: IAccountRepository,
-		@inject(ROLE_REPO) private _roleRepo: IRoleRepository,
+		// @inject(ROLE_REPO) private _roleRepo: IRoleRepository,
 		@inject(IT.ID_PROVIDER) private _idGen: IdProvider,
 		@inject(WT.AUTH_ADDON) private _authAddon: AuthAddOn
 	) {
@@ -47,7 +47,7 @@ export class AccountController extends RestCRUDControllerBase<AccountDTO> {
 			if (loggedAccount) {
 				return this.ok(res, {
 					id: account.id,
-					// username: account.username,
+					username: account.username,
 					role: account.role,
 					token: token,
 					refreshToken: refreshToken

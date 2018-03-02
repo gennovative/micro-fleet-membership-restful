@@ -28,15 +28,17 @@ const back_lib_id_generator_1 = require("back-lib-id-generator");
 // import { AccountDTO } from '../../dto/AccountDTO';
 // import { IAccountRepository } from '../../interfaces/IAccountRepository';
 const back_lib_membership_contracts_1 = require("back-lib-membership-contracts");
+// import { IRoleRepository } from '../../interfaces/IRoleRepository';
 const AuthFilter_1 = require("back-lib-common-web/dist/app/filters/AuthFilter");
 // import { Types as T } from '../../constants/Types';
 const { controller, action, filter } = back_lib_common_web_1.decorators;
 const ROLE_REPO = 'membership.IRoleRepository';
 let AccountController = class AccountController extends back_lib_common_web_1.RestCRUDControllerBase {
-    constructor(trailsApp, _repo, _roleRepo, _idGen, _authAddon) {
+    constructor(trailsApp, _repo, 
+        // @inject(ROLE_REPO) private _roleRepo: IRoleRepository,
+        _idGen, _authAddon) {
         super(trailsApp, back_lib_membership_contracts_1.AccountDTO);
         this._repo = _repo;
-        this._roleRepo = _roleRepo;
         this._idGen = _idGen;
         this._authAddon = _authAddon;
     }
@@ -55,7 +57,7 @@ let AccountController = class AccountController extends back_lib_common_web_1.Re
                 if (loggedAccount) {
                     return this.ok(res, {
                         id: account.id,
-                        // username: account.username,
+                        username: account.username,
                         role: account.role,
                         token: token,
                         refreshToken: refreshToken
@@ -107,10 +109,9 @@ AccountController = __decorate([
     controller('accounts'),
     __param(0, back_lib_common_util_1.inject(back_lib_common_web_1.Types.TRAILS_APP)),
     __param(1, back_lib_common_util_1.inject(back_lib_membership_contracts_1.Types.ACCOUNT_REPO)),
-    __param(2, back_lib_common_util_1.inject(ROLE_REPO)),
-    __param(3, back_lib_common_util_1.inject(back_lib_id_generator_1.Types.ID_PROVIDER)),
-    __param(4, back_lib_common_util_1.inject(back_lib_common_web_1.Types.AUTH_ADDON)),
-    __metadata("design:paramtypes", [TrailsApp, Object, Object, back_lib_id_generator_1.IdProvider,
+    __param(2, back_lib_common_util_1.inject(back_lib_id_generator_1.Types.ID_PROVIDER)),
+    __param(3, back_lib_common_util_1.inject(back_lib_common_web_1.Types.AUTH_ADDON)),
+    __metadata("design:paramtypes", [TrailsApp, Object, back_lib_id_generator_1.IdProvider,
         back_lib_common_web_1.AuthAddOn])
 ], AccountController);
 exports.AccountController = AccountController;

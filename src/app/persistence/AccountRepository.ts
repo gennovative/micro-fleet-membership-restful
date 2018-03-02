@@ -42,11 +42,14 @@ export class AccountRepository
 			return query;
 		});
 		const account = await queryProm;
-		const passBuffer = Buffer.from(account[0].password, 'base64');
-		const isMatched = await this.verify(passBuffer, password);
-		let accoutnDto = this._processor.toDTO(account[0], false);
-		accoutnDto.role = account[0]['role'];
-		return (isMatched ? accoutnDto : null);
+		if (account[0]) {
+			const passBuffer = Buffer.from(account[0].password, 'base64');
+			const isMatched = await this.verify(passBuffer, password);
+			let accoutnDto = this._processor.toDTO(account[0], false);
+			accoutnDto.role = account[0]['role'];
+			return (isMatched ? accoutnDto : null);
+		}
+		return null;
 	}
 
 	public async checkRefresh(id, refreshToken): Promise<Boolean> {
