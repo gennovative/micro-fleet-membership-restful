@@ -36,12 +36,25 @@ let AccountRepository = class AccountRepository extends back_lib_persistence_1.R
     create(model, opts) {
         const _super = name => super[name];
         return __awaiter(this, void 0, void 0, function* () {
-            const passBuffer = yield this.hash(model.password);
-            const password = passBuffer.toString('base64');
-            model = back_lib_membership_contracts_1.AccountDTO.translator.merge(model, {
-                password
+            let queryProm = this._processor.executeQuery((builder) => {
+                let query = builder
+                    .select('accounts.*', 'account_roles.name as role')
+                    .leftOuterJoin('account_roles', 'accounts.role_id', 'account_roles.id')
+                    .where('username', model.username)
+                    .limit(1);
+                // console.log(query.toSQL());
+                return query;
             });
-            return yield _super("create").call(this, model, opts);
+            let account = yield queryProm;
+            if (account[0]) {
+                const passBuffer = yield this.hash(model.password);
+                const password = passBuffer.toString('base64');
+                model = back_lib_membership_contracts_1.AccountDTO.translator.merge(model, {
+                    password
+                });
+                return yield _super("create").call(this, model, opts);
+            }
+            return null;
         });
     }
     findByCredentials(username, password) {

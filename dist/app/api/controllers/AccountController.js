@@ -72,9 +72,10 @@ let AccountController = class AccountController extends back_lib_common_web_1.Re
     refreshToken(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             let refreshToken = req.body.refreshToken;
-            let checkToken = yield this._repo.checkRefresh(req.params['accountId'], refreshToken);
+            let accountId = req.params['accountId'];
+            let checkToken = yield this._repo.checkRefresh(accountId, refreshToken);
             let account = {
-                id: req.params['accountId'],
+                id: accountId,
                 username: req.params['username'],
             };
             let token = yield this._authAddon.createToken(account, false);
