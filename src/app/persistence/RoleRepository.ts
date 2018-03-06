@@ -1,6 +1,7 @@
 import { QueryBuilder } from 'objection';
 import * as scrypt from 'scrypt';
 import { inject, injectable, Guard } from 'back-lib-common-util';
+import * as cc from 'back-lib-common-contracts';
 import { RepositoryBase, IDatabaseConnector, Types as PerTypes } from 'back-lib-persistence';
 
 // import { CivilianDTO, IRoleRepository } from 'back-lib-membership-contracts';
@@ -23,4 +24,11 @@ export class RoleRepository
 		super(RoleEntity, dbConnector);
 	}
 
+	/**
+	 * @override
+	 */
+	public async page(pageIndex: number, pageSize: number, opts: cc.RepositoryPageOptions = {}): Promise<cc.PagedArray<RoleDTO>> {
+		opts.includeDeleted = true;
+		return super.page(pageIndex, pageSize, opts);
+	}
 }
