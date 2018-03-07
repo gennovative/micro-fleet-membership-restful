@@ -43,7 +43,7 @@ export class AccountController extends RestCRUDControllerBase<AccountDTO> {
 			]);
 			// let token = await this._authAddon.createToken(account, false);
 			// let refreshToken = await this._authAddon.createToken(account, true);
-			let loggedAccount = await this._repo.patch({ id: account.id, refreshToken: refreshToken });
+			let loggedAccount = await this._repo.patch({ id: account.id, refreshToken });
 			if (loggedAccount) {
 				return this.ok(res, {
 					id: account.id,
@@ -81,5 +81,21 @@ export class AccountController extends RestCRUDControllerBase<AccountDTO> {
 			id: this._idGen.nextBigInt().toString()
 		}) as AccountDTO;
 		return this.repo.create(dto);
+	}
+
+	/**
+	 * @override
+	 */
+	// @filter(AuthFilter, f => f.guard)
+	protected async doPatch(model: Partial<AccountDTO>, req: express.Request, res: express.Response): Promise<Partial<AccountDTO> & Partial<AccountDTO>[]> {
+		let body = req.body.model;
+		let id = body.id,
+			username = body.username,
+			password = body.password,
+			status = body.status,
+			roleId = body.roleId;
+
+		let patchRes = await this._repo.changePassword({ id, username, password, status, roleId });
+		return patchRes;
 	}
 }

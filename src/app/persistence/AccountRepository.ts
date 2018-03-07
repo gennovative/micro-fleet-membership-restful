@@ -33,7 +33,7 @@ export class AccountRepository
 			return query;
 		});
 		let account = await queryProm;
-		if (account[0]) {
+		if (!account[0]) {
 			const passBuffer = await this.hash(model.password);
 			const password = passBuffer.toString('base64');
 			model = AccountDTO.translator.merge(model, {
@@ -88,4 +88,13 @@ export class AccountRepository
 		return scrypt.verifyKdf(kdf, key);
 	}
 
+	public async changePassword(model, opts?): Promise<Partial<AccountDTO> & Partial<AccountDTO>[]> {
+		const passBuffer = await this.hash(model.password);
+		const password = passBuffer.toString('base64');
+		let id = model.id,
+			username = model.username,
+			status = model.status,
+			roleId = model.roleId;
+		return this.patch({ id, username, password, status, roleId });
+	}
 }

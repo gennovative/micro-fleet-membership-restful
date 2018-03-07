@@ -46,7 +46,7 @@ let AccountRepository = class AccountRepository extends back_lib_persistence_1.R
                 return query;
             });
             let account = yield queryProm;
-            if (account[0]) {
+            if (!account[0]) {
                 const passBuffer = yield this.hash(model.password);
                 const password = passBuffer.toString('base64');
                 model = back_lib_membership_contracts_1.AccountDTO.translator.merge(model, {
@@ -102,6 +102,14 @@ let AccountRepository = class AccountRepository extends back_lib_persistence_1.R
     }
     verify(kdf, key) {
         return scrypt.verifyKdf(kdf, key);
+    }
+    changePassword(model, opts) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const passBuffer = yield this.hash(model.password);
+            const password = passBuffer.toString('base64');
+            let id = model.id, username = model.username, status = model.status, roleId = model.roleId;
+            return this.patch({ id, username, password, status, roleId });
+        });
     }
 };
 AccountRepository = __decorate([

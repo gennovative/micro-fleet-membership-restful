@@ -53,7 +53,7 @@ let AccountController = class AccountController extends back_lib_common_web_1.Re
                 ]);
                 // let token = await this._authAddon.createToken(account, false);
                 // let refreshToken = await this._authAddon.createToken(account, true);
-                let loggedAccount = yield this._repo.patch({ id: account.id, refreshToken: refreshToken });
+                let loggedAccount = yield this._repo.patch({ id: account.id, refreshToken });
                 if (loggedAccount) {
                     return this.ok(res, {
                         id: account.id,
@@ -90,6 +90,18 @@ let AccountController = class AccountController extends back_lib_common_web_1.Re
             id: this._idGen.nextBigInt().toString()
         });
         return this.repo.create(dto);
+    }
+    /**
+     * @override
+     */
+    // @filter(AuthFilter, f => f.guard)
+    doPatch(model, req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let body = req.body.model;
+            let id = body.id, username = body.username, password = body.password, status = body.status, roleId = body.roleId;
+            let patchRes = yield this._repo.changePassword({ id, username, password, status, roleId });
+            return patchRes;
+        });
     }
 };
 __decorate([
