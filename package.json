@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "back-lib-common-constants": "git+ssh://git@bitbucket.org/firstinteractive/back-lib-common-constants.git#1.3.0",
-    "back-lib-common-contracts": "git+ssh://git@bitbucket.org:firstinteractive/back-lib-common-contracts.git#1.2.0",
+    "back-lib-common-contracts": "git+ssh://git@bitbucket.org:firstinteractive/back-lib-common-contracts.git#1.2.1",
     "back-lib-common-util": "git+ssh://git@bitbucket.org:firstinteractive/back-lib-common-util.git#1.2.1",
     "back-lib-common-web": "git+ssh://git@bitbucket.org:firstinteractive/back-lib-common-web.git#development",
     "back-lib-foundation": "git+ssh://git@bitbucket.org:firstinteractive/back-lib-foundation.git#development",
