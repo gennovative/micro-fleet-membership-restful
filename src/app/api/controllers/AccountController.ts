@@ -1,47 +1,101 @@
 import * as express from 'express';
 import TrailsApp = require('trails');
 
-import { injectable, inject, Guard, IDependencyContainer, Types as CmT } from 'back-lib-common-util';
-import { SettingItem, SettingItemDataType } from 'back-lib-common-contracts';
-import { RestCRUDControllerBase, decorators, Types as WT } from 'back-lib-common-web';
-import { IdGenerator, Types as IT } from 'back-lib-id-generator';
+import { injectable, inject, unmanaged, Guard, IDependencyContainer, Types as CmT } from 'back-lib-common-util';
+import { SettingItem, SettingItemDataType, IRepository } from 'back-lib-common-contracts';
+import { RestCRUDControllerBase, AuthAddOn, decorators, Types as WT } from 'back-lib-common-web';
+import { IdProvider, Types as IT } from 'back-lib-id-generator';
 
-import { AccountDTO } from '../../dto/AccountDTO';
-import { IAccountRepository } from '../../interfaces/IAccountRepository';
+// import { AccountDTO } from '../../dto/AccountDTO';
+// import { IAccountRepository } from '../../interfaces/IAccountRepository';
+import { IAccountRepository, AccountDTO, Types as T } from 'back-lib-membership-contracts';
 import { AccountRepository } from '../../persistence/AccountRepository';
-import { Types as T } from '../../constants/Types';
+// import { IRoleRepository } from '../../interfaces/IRoleRepository';
+import { AuthFilter } from 'back-lib-common-web/dist/app/filters/AuthFilter';
+// import { Types as T } from '../../constants/Types';
 
-const { controller, action } = decorators;
+const { controller, action, filter } = decorators;
+const ROLE_REPO = 'membership.IRoleRepository';
 
 
 @injectable()
-@controller('program')
-class AccountController extends RestCRUDControllerBase<AccountDTO> {
+@controller('accounts')
+export class AccountController extends RestCRUDControllerBase<AccountDTO> {
 
 	constructor(
-		trailsApp: TrailsApp,
+		@inject(WT.TRAILS_APP) trailsApp: TrailsApp,
 		@inject(T.ACCOUNT_REPO) private _repo: IAccountRepository,
-		@inject(IT.ID_PROVIDER) private _idGen: IdGenerator,
+		// @inject(ROLE_REPO) private _roleRepo: IRoleRepository,
+		@inject(IT.ID_PROVIDER) private _idGen: IdProvider,
+		@inject(WT.AUTH_ADDON) private _authAddon: AuthAddOn
 	) {
-		super(trailsApp);
+		super(trailsApp, AccountDTO);
 	}
 
-	@action('POST')
+	@action('POST', 'login')
 	public async authenticate(req: express.Request, res: express.Response) {
 		let body = req.body;
-		let account = this._repo.findByCredentials(body.username, body.password);
-		if (!account) {
-			return this.unauthorized(res);
+		let account = await this._repo.findByCredentials(body.username, body.password);
+		if (account) {
+			let [token, refreshToken] = await Promise.all([
+				this._authAddon.createToken(account, false),
+				this._authAddon.createToken(account, true)
+			]);
+			// let token = await this._authAddon.createToken(account, false);
+			// let refreshToken = await this._authAddon.createToken(account, true);
+			let loggedAccount = await this._repo.patch({ id: account.id, refreshToken });
+			if (loggedAccount) {
+				return this.ok(res, {
+					id: account.id,
+					username: account.username,
+					role: account.role,
+					token: token,
+					refreshToken: refreshToken
+				});
+			}
+			return this.internalError(res, 'An error occured!');
 		}
+		return this.unauthorized(res);
 		//TODO: Should return only username, fullname and roles.
-		return this.ok(res, account);
 	}
 
+	@action('POST', 'refresh-token')
+	@filter(AuthFilter, f => f.guard)
+	public async refreshToken(req: express.Request, res: express.Response) {
+		let refreshToken = req.body.refreshToken;
+		let accountId = req.params['accountId'];
+		let checkToken = await this._repo.checkRefresh(accountId, refreshToken);
+		let account = {
+			id: accountId,
+			username: req.params['username'],
+		};
+		let token = await this._authAddon.createToken(account, false);
+		return this.ok(res, { token: token });
+	}
 
+	/**
+	 * @override
+	 */
 	protected doCreate(dto: AccountDTO, req: express.Request, res: express.Response): Promise<AccountDTO & AccountDTO[]> {
 		dto = this.translator.merge(dto, {
 			id: this._idGen.nextBigInt().toString()
 		}) as AccountDTO;
 		return this.repo.create(dto);
+	}
+
+	/**
+	 * @override
+	 */
+	// @filter(AuthFilter, f => f.guard)
+	protected async doPatch(model: Partial<AccountDTO>, req: express.Request, res: express.Response): Promise<Partial<AccountDTO> & Partial<AccountDTO>[]> {
+		let body = req.body.model;
+		let id = body.id,
+			username = body.username,
+			password = body.password,
+			status = body.status,
+			roleId = body.roleId;
+
+		let patchRes = await this._repo.changePassword({ id, username, password, status, roleId });
+		return patchRes;
 	}
 }

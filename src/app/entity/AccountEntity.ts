@@ -8,23 +8,23 @@ export class AccountEntity
 
 	public static translator: ModelAutoMapper<AccountEntity>;
 
-	// public static get relationMappings(): any {
-	// 	// Lazy reference to avoid circular reference.
-	// 	// `relationMappings()` is called only once for each connection.
+	public static get relationMappings(): any {
+		// Lazy reference to avoid circular reference.
+		// `relationMappings()` is called only once for each connection.
 
-	// 	const { DeviceGroupEntity } = require('../entity/DeviceGroupEntity');
+		const { RoleEntity } = require('../entity/RoleEntity');
 
-	// 	return {
-	// 		belongtoDeviceGroups: {
-	// 			relation: Model.HasOneRelation,
-	// 			modelClass: DeviceGroupEntity,
-	// 			join: {
-	// 				from: 'public.devices.group_id',
-	// 				to: 'public.device_groups.id'
-	// 			}
-	// 		}
-	// 	};
-	// }
+		return {
+			belongtoRoles: {
+				relation: Model.HasOneRelation,
+				modelClass: RoleEntity,
+				join: {
+					from: 'public.accounts.role_id',
+					to: 'public.account_roles.id'
+				}
+			}
+		};
+	}
 
 
 	private static readonly TABLE_NAME = 'public.accounts';
@@ -38,7 +38,6 @@ export class AccountEntity
 
 	public username: string = undefined;
 	public password: string = undefined;
-	public deviceUid: BigSInt = undefined;
 	public loginAttempts: number = undefined;
 	public lastAttemptAt: Date = undefined;
 	public lastLoginAt: Date = undefined;
@@ -48,6 +47,10 @@ export class AccountEntity
 	public deletedAt: Date = undefined;
 	public createdAt: Date = undefined;
 	public updatedAt: Date = undefined;
+	public roleId: BigSInt = undefined;
+	public refreshToken: string = undefined;
+	public tokenExp: Date = undefined;
+	// public civilianId: BigSInt = undefined;
 }
 
 AccountEntity.translator = new ModelAutoMapper(AccountEntity);

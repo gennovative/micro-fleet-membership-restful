@@ -12,21 +12,17 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const back_lib_common_web_1 = require("back-lib-common-web");
 const back_lib_common_util_1 = require("back-lib-common-util");
-const { lazyInject } = back_lib_common_web_1.decorators;
-let TestFilter = class TestFilter {
-    constructor(_repo) {
-        this._repo = _repo;
-    }
-    sayHi(request, response, next) {
-        console.log('Test policy args:', arguments.length);
-        next();
+const back_lib_persistence_1 = require("back-lib-persistence");
+const CivilianEntity_1 = require("../entity/CivilianEntity");
+let CivilianRepository = class CivilianRepository extends back_lib_persistence_1.RepositoryBase {
+    constructor(dbConnector) {
+        super(CivilianEntity_1.CivilianEntity, dbConnector);
     }
 };
-TestFilter = __decorate([
+CivilianRepository = __decorate([
     back_lib_common_util_1.injectable(),
-    __param(0, back_lib_common_util_1.inject(back_lib_common_util_1.Types.DEPENDENCY_CONTAINER)),
+    __param(0, back_lib_common_util_1.inject(back_lib_persistence_1.Types.DB_CONNECTOR)),
     __metadata("design:paramtypes", [Object])
-], TestFilter);
-exports.TestFilter = TestFilter;
+], CivilianRepository);
+exports.CivilianRepository = CivilianRepository;

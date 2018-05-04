@@ -103,7 +103,7 @@ ALTER TABLE "account_roles" OWNER TO "postgres";
 CREATE TABLE "accounts" (
     "id" bigint NOT NULL,
     "username" character varying(100) NOT NULL,
-    "password" character varying(100) NOT NULL,
+    "password" character varying(1000) NOT NULL,
     "login_attempts" integer NOT NULL,
     "last_attempt_at" timestamp without time zone,
     "last_login_at" timestamp without time zone,
@@ -113,6 +113,9 @@ CREATE TABLE "accounts" (
     "deleted_at" timestamp without time zone,
     "created_at" timestamp without time zone,
     "updated_at" timestamp without time zone,
+	"role_id" bigint,
+	"refresh_token" character varying(255),
+	"token_exp" timestamp without time zone,
     CONSTRAINT "status_check" CHECK ((("status")::"text" = ANY (ARRAY[('active'::character varying)::"text", ('disabled'::character varying)::"text", ('locked'::character varying)::"text", ('banned'::character varying)::"text"])))
 );
 
@@ -136,6 +139,7 @@ CREATE TABLE "civilians" (
     "address_long" double precision,
     "marital_status" character varying(10),
     "city_id" bigint,
+	"deleted_at" timestamp without time zone,
     CONSTRAINT "marital_stauts_check" CHECK ((("marital_status")::"text" = ANY (ARRAY[('single'::character varying)::"text", ('married'::character varying)::"text", ('separated'::character varying)::"text", ('devorced'::character varying)::"text", ('widowed'::character varying)::"text"])))
 );
 
@@ -195,6 +199,12 @@ ALTER TABLE ONLY "account_privilege"
 ALTER TABLE ONLY "account_privilege"
     ADD CONSTRAINT "account_privilege_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "account_roles"("id");
 
+--
+-- TOC entry 2024 (class 2606 OID 32783)
+-- Name: accounts accounts_role_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+ALTER TABLE ONLY "accounts"
+    ADD CONSTRAINT "accounts_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "account_roles"("id");
 
 -- Completed on 2018-01-11 22:17:50
 
