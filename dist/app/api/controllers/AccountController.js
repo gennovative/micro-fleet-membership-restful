@@ -24,34 +24,107 @@ const express = require("express");
 const TrailsApp = require("trails");
 const back_lib_common_util_1 = require("back-lib-common-util");
 const back_lib_common_web_1 = require("back-lib-common-web");
-const Types_1 = require("../../constants/Types");
-const { controller, action } = back_lib_common_web_1.decorators;
+const back_lib_id_generator_1 = require("back-lib-id-generator");
+// import { AccountDTO } from '../../dto/AccountDTO';
+// import { IAccountRepository } from '../../interfaces/IAccountRepository';
+const back_lib_membership_contracts_1 = require("back-lib-membership-contracts");
+// import { IRoleRepository } from '../../interfaces/IRoleRepository';
+const AuthFilter_1 = require("back-lib-common-web/dist/app/filters/AuthFilter");
+// import { Types as T } from '../../constants/Types';
+const { controller, action, filter } = back_lib_common_web_1.decorators;
+const ROLE_REPO = 'membership.IRoleRepository';
 let AccountController = class AccountController extends back_lib_common_web_1.RestCRUDControllerBase {
-    constructor(trailsApp, _repo) {
-        super(trailsApp);
+    constructor(trailsApp, _repo, 
+        // @inject(ROLE_REPO) private _roleRepo: IRoleRepository,
+        _idGen, _authAddon) {
+        super(trailsApp, back_lib_membership_contracts_1.AccountDTO);
         this._repo = _repo;
+        this._idGen = _idGen;
+        this._authAddon = _authAddon;
     }
     authenticate(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             let body = req.body;
-            let account = this._repo.findByCredentials(body.username, body.password);
-            if (!account) {
-                return this.unauthorized(res);
+            let account = yield this._repo.findByCredentials(body.username, body.password);
+            if (account) {
+                let [token, refreshToken] = yield Promise.all([
+                    this._authAddon.createToken(account, false),
+                    this._authAddon.createToken(account, true)
+                ]);
+                // let token = await this._authAddon.createToken(account, false);
+                // let refreshToken = await this._authAddon.createToken(account, true);
+                let loggedAccount = yield this._repo.patch({ id: account.id, refreshToken });
+                if (loggedAccount) {
+                    return this.ok(res, {
+                        id: account.id,
+                        username: account.username,
+                        role: account.role,
+                        token: token,
+                        refreshToken: refreshToken
+                    });
+                }
+                return this.internalError(res, 'An error occured!');
             }
+            return this.unauthorized(res);
             //TODO: Should return only username, fullname and roles.
-            return this.ok(res, account);
+        });
+    }
+    refreshToken(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let refreshToken = req.body.refreshToken;
+            let accountId = req.params['accountId'];
+            let checkToken = yield this._repo.checkRefresh(accountId, refreshToken);
+            let account = {
+                id: accountId,
+                username: req.params['username'],
+            };
+            let token = yield this._authAddon.createToken(account, false);
+            return this.ok(res, { token: token });
+        });
+    }
+    /**
+     * @override
+     */
+    doCreate(dto, req, res) {
+        dto = this.translator.merge(dto, {
+            id: this._idGen.nextBigInt().toString()
+        });
+        return this.repo.create(dto);
+    }
+    /**
+     * @override
+     */
+    // @filter(AuthFilter, f => f.guard)
+    doPatch(model, req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let body = req.body.model;
+            let id = body.id, username = body.username, password = body.password, status = body.status, roleId = body.roleId;
+            let patchRes = yield this._repo.changePassword({ id, username, password, status, roleId });
+            return patchRes;
         });
     }
 };
 __decorate([
-    action('POST'),
+    action('POST', 'login'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], AccountController.prototype, "authenticate", null);
+__decorate([
+    action('POST', 'refresh-token'),
+    filter(AuthFilter_1.AuthFilter, f => f.guard),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], AccountController.prototype, "refreshToken", null);
 AccountController = __decorate([
     back_lib_common_util_1.injectable(),
-    controller('program'),
-    __param(1, back_lib_common_util_1.inject(Types_1.Types.ACCOUNT_REPO)),
-    __metadata("design:paramtypes", [TrailsApp, Object])
+    controller('accounts'),
+    __param(0, back_lib_common_util_1.inject(back_lib_common_web_1.Types.TRAILS_APP)),
+    __param(1, back_lib_common_util_1.inject(back_lib_membership_contracts_1.Types.ACCOUNT_REPO)),
+    __param(2, back_lib_common_util_1.inject(back_lib_id_generator_1.Types.ID_PROVIDER)),
+    __param(3, back_lib_common_util_1.inject(back_lib_common_web_1.Types.AUTH_ADDON)),
+    __metadata("design:paramtypes", [TrailsApp, typeof (_a = typeof back_lib_membership_contracts_1.IAccountRepository !== "undefined" && back_lib_membership_contracts_1.IAccountRepository) === "function" && _a || Object, back_lib_id_generator_1.IdProvider, typeof (_b = typeof back_lib_common_web_1.AuthAddOn !== "undefined" && back_lib_common_web_1.AuthAddOn) === "function" && _b || Object])
 ], AccountController);
+exports.AccountController = AccountController;
+var _a, _b;

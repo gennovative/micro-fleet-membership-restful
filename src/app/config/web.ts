@@ -14,7 +14,7 @@ export = {
 	 * Can be true/false or an object of CORS options
 	 * @see {@link https://github.com/expressjs/cors#configuring-cors}
 	 */
-	cors: false,
+	cors: true,
 
 	/**
 	 * Init method, can be used to customize express instance

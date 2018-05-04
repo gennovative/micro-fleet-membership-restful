@@ -1,6 +1,6 @@
 import { IRepository } from 'back-lib-common-contracts' ;
 
-import { AccountDTO } from '../dto/AccountDTO';
+import { AccountDTO } from 'back-lib-membership-contracts';
 
 
 /**

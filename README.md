@@ -1,4 +1,4 @@
-# Gennova backend membership RESTful web service
+# Gennova backend RESTful web service for Membership
 
 Exposes RESTful APIs to operate accounts and roles.
 
@@ -17,10 +17,14 @@ Exposes RESTful APIs to operate accounts and roles.
 
 `gulp watch`: To transpile and watch for edit.
 
+
 ## RELEASE
 
-`gulp release`: To transpile and create `app.d.ts` definition file.
+- Create Docker image: `docker build -t gennovative/rest-membership .` (Note the last dot ".")
+
 
 ## VERSIONS
 
-### 0.1.0
+### 1.0.0
+- Support CRUD for accounts and account roles.
+- Can login and issue tokens..
