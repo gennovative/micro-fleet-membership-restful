@@ -1,7 +1,7 @@
 {
   "name": "back-rest-membership",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Exposes RESTful APIs to operate accounts and roles.",
   "main": "./dist/app/server.js",
   "repository": "git@bitbucket.org:firstinteractive/back-rest-membership.git",

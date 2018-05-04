@@ -55,6 +55,7 @@ CivilianController = __decorate([
     __param(0, back_lib_common_util_1.inject(back_lib_common_web_1.Types.TRAILS_APP)),
     __param(1, back_lib_common_util_1.inject(back_lib_membership_contracts_1.Types.CIVILIAN_REPO)),
     __param(2, back_lib_common_util_1.inject(back_lib_id_generator_1.Types.ID_PROVIDER)),
-    __metadata("design:paramtypes", [TrailsApp, Object, back_lib_id_generator_1.IdProvider])
+    __metadata("design:paramtypes", [TrailsApp, typeof (_a = typeof back_lib_membership_contracts_1.ICivilianRepository !== "undefined" && back_lib_membership_contracts_1.ICivilianRepository) === "function" && _a || Object, back_lib_id_generator_1.IdProvider])
 ], CivilianController);
 exports.CivilianController = CivilianController;
+var _a;

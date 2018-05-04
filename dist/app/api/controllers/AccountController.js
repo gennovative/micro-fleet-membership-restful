@@ -124,7 +124,7 @@ AccountController = __decorate([
     __param(1, back_lib_common_util_1.inject(back_lib_membership_contracts_1.Types.ACCOUNT_REPO)),
     __param(2, back_lib_common_util_1.inject(back_lib_id_generator_1.Types.ID_PROVIDER)),
     __param(3, back_lib_common_util_1.inject(back_lib_common_web_1.Types.AUTH_ADDON)),
-    __metadata("design:paramtypes", [TrailsApp, Object, back_lib_id_generator_1.IdProvider,
-        back_lib_common_web_1.AuthAddOn])
+    __metadata("design:paramtypes", [TrailsApp, typeof (_a = typeof back_lib_membership_contracts_1.IAccountRepository !== "undefined" && back_lib_membership_contracts_1.IAccountRepository) === "function" && _a || Object, back_lib_id_generator_1.IdProvider, typeof (_b = typeof back_lib_common_web_1.AuthAddOn !== "undefined" && back_lib_common_web_1.AuthAddOn) === "function" && _b || Object])
 ], AccountController);
 exports.AccountController = AccountController;
+var _a, _b;
