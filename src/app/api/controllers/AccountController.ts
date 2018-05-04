@@ -4,6 +4,7 @@ import TrailsApp = require('trails');
 import { injectable, inject, Guard, IDependencyContainer, Types as CmT } from 'back-lib-common-util';
 import { SettingItem, SettingItemDataType } from 'back-lib-common-contracts';
 import { RestCRUDControllerBase, decorators, Types as WT } from 'back-lib-common-web';
+import { IdGenerator, Types as IT } from 'back-lib-id-generator';
 
 import { AccountDTO } from '../../dto/AccountDTO';
 import { IAccountRepository } from '../../interfaces/IAccountRepository';
@@ -19,7 +20,8 @@ class AccountController extends RestCRUDControllerBase<AccountDTO> {
 
 	constructor(
 		trailsApp: TrailsApp,
-		@inject(T.ACCOUNT_REPO) private _repo: IAccountRepository
+		@inject(T.ACCOUNT_REPO) private _repo: IAccountRepository,
+		@inject(IT.ID_PROVIDER) private _idGen: IdGenerator,
 	) {
 		super(trailsApp);
 	}
@@ -35,5 +37,11 @@ class AccountController extends RestCRUDControllerBase<AccountDTO> {
 		return this.ok(res, account);
 	}
 
-	
+
+	protected doCreate(dto: AccountDTO, req: express.Request, res: express.Response): Promise<AccountDTO & AccountDTO[]> {
+		dto = this.translator.merge(dto, {
+			id: this._idGen.nextBigInt().toString()
+		}) as AccountDTO;
+		return this.repo.create(dto);
+	}
 }
