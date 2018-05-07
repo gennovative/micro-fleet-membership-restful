@@ -6,7 +6,7 @@
 	"cache_port_0": "6379",
 	"db_num_conn": 1,
 	"db_engine_0": "pg",
-	"db_host_0": "localhost",
+	"db_host_0": "infras_postgres",
 	"db_user_0": "postgres",
 	"db_pass_0": "postgres",
 	"db_name_0": "membership",
@@ -15,6 +15,6 @@
 	"msgBroker_queue": "program-service-handler",
 	"msgBroker_username": "firstidea",
 	"msgBroker_password": "gennova",
-	"jwtSecret": "6KrCccge7y",
-	"jwtIssuer": "http://localhost:3000"
+	"jwtSecret": "75510E28814558A454F83081DEAD536B73450F30B60DB006CAF4F970A8420790",
+	"jwtIssuer": "http://membership.firstidea.vn"
 }

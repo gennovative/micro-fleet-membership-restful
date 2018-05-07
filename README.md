@@ -20,7 +20,10 @@ Exposes RESTful APIs to operate accounts and roles.
 
 ## RELEASE
 
-- Create Docker image: `docker build -t gennovative/rest-membership .` (Note the last dot ".")
+- Jump to script folder: `cd ./docker`
+- Create Docker image: `bash ./create-image.sh`
+- Deploy services to Docker swarm`: `sudo bash ./deploy.sh`
+- Remove services from Docker swarm`: `sudo bash ./undeploy.sh`
 
 
 ## VERSIONS

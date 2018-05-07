@@ -1,0 +1,16 @@
+version: '3.2'
+
+networks:
+  gennet:
+    external: true
+
+services:
+  rest:
+    image: "gennovative/membership-rest:1.0.0"
+    networks:
+      - gennet
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.gnv.node.web==1
