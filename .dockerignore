@@ -4,6 +4,7 @@ _sql
 .temp
 .vscode
 coverage
+Dockerfile
 node_modules
 src
 gulpfile.js
