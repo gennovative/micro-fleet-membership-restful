@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as joi from 'joi';
 
-import { injectable, inject, PagedArray, ModelAutoMapper } from '@micro-fleet/common';
+import { inject, PagedArray, ModelAutoMapper } from '@micro-fleet/common';
 import { RestControllerBase, decorators as d } from '@micro-fleet/web';
 import { IdProviderAddOn, Types as IT } from '@micro-fleet/id-generator';
 
@@ -10,10 +10,9 @@ import { ICivilianRepository } from '../interfaces/ICivilianRepository';
 import { Types as T } from '../constants/Types';
 
 
-@injectable()
 @d.controller('civilians')
 @d.authorized()
-export class CivilianController extends RestControllerBase {
+export default class CivilianController extends RestControllerBase {
 
 	//#region Getters & Setters
 
@@ -35,6 +34,14 @@ export class CivilianController extends RestControllerBase {
 		super();
 	}
 
+	/**
+	 * For testing this endpoint.
+	 */
+	@d.ALL('ping')
+	public ping(req: express.Request, res: express.Response) {
+		this.ok(res, 'pong');
+	}
+
 
 	//#region Basic CRUD operations
 	
@@ -50,7 +57,7 @@ export class CivilianController extends RestControllerBase {
 	/**
 	 * POST /civilians
 	 */
-	@d.POST()
+	@d.POST('/')
 	@d.model({ ModelClass: CivilianDTO })
 	public async create(req: express.Request, res: express.Response) {
 		const dto = this.trans.merge(req['model'], {
@@ -163,7 +170,7 @@ export class CivilianController extends RestControllerBase {
 	/**
 	 * PATCH /civilians
 	 */
-	@d.PATCH()
+	@d.PATCH('/')
 	@d.model({
 		ModelClass: CivilianDTO,
 		isPartial: true
@@ -181,7 +188,7 @@ export class CivilianController extends RestControllerBase {
 	/**
 	 * PUT /civilians
 	 */
-	@d.PUT()
+	@d.PUT('/')
 	@d.model({ ModelClass: CivilianDTO })
 	public async update(req: express.Request, res: express.Response) {
 		const dto = req['mode'] as CivilianDTO;

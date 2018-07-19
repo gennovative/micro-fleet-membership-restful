@@ -19,7 +19,9 @@ const web_1 = require("@micro-fleet/web");
 const id_generator_1 = require("@micro-fleet/id-generator");
 const RoleDTO_1 = require("../dto/RoleDTO");
 const Types_1 = require("../constants/Types");
-let RoleController = class RoleController extends web_1.RestControllerBase {
+let RoleController = 
+// @d.authorized()
+class RoleController extends web_1.RestControllerBase {
     //#endregion Getters & Setters
     constructor(_roleRepo, _idGen) {
         super();
@@ -32,6 +34,12 @@ let RoleController = class RoleController extends web_1.RestControllerBase {
     }
     get trans() {
         return RoleDTO_1.RoleDTO.translator;
+    }
+    /**
+     * For testing this endpoint.
+     */
+    ping(req, res) {
+        this.ok(res, 'pong');
     }
     //#region Basic CRUD operations
     /**
@@ -133,13 +141,19 @@ let RoleController = class RoleController extends web_1.RestControllerBase {
     }
 };
 __decorate([
+    web_1.decorators.ALL('ping'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], RoleController.prototype, "ping", null);
+__decorate([
     web_1.decorators.GET('countAll'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], RoleController.prototype, "countAll", null);
 __decorate([
-    web_1.decorators.POST(),
+    web_1.decorators.POST('/'),
     web_1.decorators.model({ ModelClass: RoleDTO_1.RoleDTO }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
@@ -170,7 +184,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], RoleController.prototype, "page", null);
 __decorate([
-    web_1.decorators.PATCH(),
+    web_1.decorators.PATCH('/'),
     web_1.decorators.model({
         ModelClass: RoleDTO_1.RoleDTO,
         isPartial: true
@@ -180,19 +194,19 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], RoleController.prototype, "patch", null);
 __decorate([
-    web_1.decorators.PUT(),
+    web_1.decorators.PUT('/'),
     web_1.decorators.model({ ModelClass: RoleDTO_1.RoleDTO }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], RoleController.prototype, "update", null);
 RoleController = __decorate([
-    common_1.injectable(),
-    web_1.decorators.controller('roles'),
-    web_1.decorators.authorized(),
+    web_1.decorators.controller('roles')
+    // @d.authorized()
+    ,
     __param(0, common_1.inject(Types_1.Types.ROLE_REPO)),
     __param(1, common_1.inject(id_generator_1.Types.ID_PROVIDER)),
     __metadata("design:paramtypes", [Object, id_generator_1.IdProviderAddOn])
 ], RoleController);
-exports.RoleController = RoleController;
+exports.default = RoleController;
 //# sourceMappingURL=RoleController.js.map

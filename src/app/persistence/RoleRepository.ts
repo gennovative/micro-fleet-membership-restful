@@ -20,7 +20,7 @@ export class RoleRepository
 
 
 	public async pageAll(pageIndex: number, pageSize: number, opts: RepositoryPageOptions = {}): Promise<PagedArray<RoleDTO>> {
-		opts.includeDeleted = true;
+		opts.excludeDeleted = false;
 		return super.page(pageIndex, pageSize, opts);
 	}
 }

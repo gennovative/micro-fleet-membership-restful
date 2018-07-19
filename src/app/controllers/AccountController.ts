@@ -1,8 +1,8 @@
 import * as express from 'express';
 import * as joi from 'joi';
 
-import { injectable, inject, PagedArray, ModelAutoMapper } from '@micro-fleet/common';
-import { RestControllerBase, AuthAddOn, decorators as d, Types as WT } from '@micro-fleet/web';
+import { inject, PagedArray, ModelAutoMapper } from '@micro-fleet/common';
+import { RestControllerBase, decorators as d } from '@micro-fleet/web';
 import { IdProviderAddOn, Types as IT } from '@micro-fleet/id-generator';
 
 import { AccountDTO } from '../dto/AccountDTO';
@@ -10,10 +10,9 @@ import { IAccountRepository } from '../interfaces/IAccountRepository';
 import { Types as T } from '../constants/Types';
 
 
-@injectable()
 @d.controller('accounts')
-@d.authorized()
-export class AccountController extends RestControllerBase {
+// @d.authorized()
+export default class AccountController extends RestControllerBase {
 
 	//#region Getters & Setters
 
@@ -30,54 +29,19 @@ export class AccountController extends RestControllerBase {
 
 	constructor(
 		@inject(T.ACCOUNT_REPO) private _accRepo: IAccountRepository,
-		@inject(IT.ID_PROVIDER) private _idGen: IdProviderAddOn,
-		@inject(WT.AUTH_ADDON) private _authAddon: AuthAddOn
+		@inject(IT.ID_PROVIDER) private _idGen: IdProviderAddOn
 	) {
 		super();
 	}
 
-	@d.POST('login')
-	public async authenticate(req: express.Request, res: express.Response) {
-		let body = req.body;
-		let account = await this._accRepo.findByCredentials(body.username, body.password);
-		if (account) {
-			let [token, refreshToken] = await Promise.all([
-				this._authAddon.createToken(account, false),
-				this._authAddon.createToken(account, true)
-			]);
-			// let token = await this._authAddon.createToken(account, false);
-			// let refreshToken = await this._authAddon.createToken(account, true);
-			let loggedAccount = await this._accRepo.patch({ id: account.id, refreshToken });
-			if (loggedAccount) {
-				return this.ok(res, {
-					id: account.id,
-					username: account.username,
-					role: account.role,
-					token: token,
-					refreshToken: refreshToken
-				});
-			}
-			return this.internalError(res, 'An error occured!');
-		}
-		return this.unauthorized(res);
-		//TODO: Should return only username, fullname and roles.
+	/**
+	 * For testing this endpoint.
+	 */
+	@d.ALL('ping')
+	public ping(req: express.Request, res: express.Response) {
+		return res.status(200).json('pong');
 	}
 
-	@d.POST('refresh-token/:id')
-	public async refreshToken(req: express.Request, res: express.Response) {
-		const refreshToken = req.body.refreshToken;
-		const accountId = req.params.id;
-		const isTokenValid = await this._accRepo.checkRefresh(accountId, refreshToken);
-		if (!isTokenValid) {
-			return this.forbidden(res, 'INVALID_REFRESH_TOKEN');
-		}
-		const account = {
-			id: accountId,
-			username: req.params['username'],
-		};
-		const token = await this._authAddon.createToken(account, false);
-		return this.ok(res, { token: token });
-	}
 
 	//#region Basic CRUD operations
 	
@@ -93,7 +57,7 @@ export class AccountController extends RestControllerBase {
 	/**
 	 * POST /accounts
 	 */
-	@d.POST()
+	@d.POST('/')
 	@d.model({ ModelClass: AccountDTO })
 	public async create(req: express.Request, res: express.Response) {
 		const dto = this.trans.merge(req['model'], {
@@ -206,7 +170,7 @@ export class AccountController extends RestControllerBase {
 	/**
 	 * PATCH /accounts
 	 */
-	@d.PATCH()
+	@d.PATCH('/')
 	@d.model({
 		ModelClass: AccountDTO,
 		isPartial: true
@@ -224,7 +188,7 @@ export class AccountController extends RestControllerBase {
 	/**
 	 * PUT /accounts
 	 */
-	@d.PUT()
+	@d.PUT('/')
 	@d.model({ ModelClass: AccountDTO })
 	public async update(req: express.Request, res: express.Response) {
 		const dto = req['mode'] as AccountDTO;
@@ -236,5 +200,4 @@ export class AccountController extends RestControllerBase {
 	}
 
 	//#endregion Basic CRUD operations
-
 }

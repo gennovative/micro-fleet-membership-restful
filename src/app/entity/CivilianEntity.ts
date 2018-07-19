@@ -15,6 +15,7 @@ export class CivilianEntity
 		return 'public.civilians';
 	}
 
+	public id: BigInt = undefined;
 	public fullname: string = undefined;
 	public birthday: Date = undefined;
 	public gender: string = undefined;

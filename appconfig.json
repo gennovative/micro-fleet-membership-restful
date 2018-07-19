@@ -9,8 +9,9 @@
 	"db_user": "postgres",
 	"db_pass": "postgres",
 	"db_name": "membership",
-	"jwtSecret": "75510E28814558A454F83081DEAD536B73450F30B60DB006CAF4F970A8420790",
-	"jwtIssuer": "http://localhost:3000",
+	"auth_secret": "75510E28814558A454F83081DEAD536B73450F30B60DB006CAF4F970A8420790",
+	"auth_issuer": "http://localhost:3000",
 	"web_port": 3000,
-	"web_url_prefix": "/api/v1"
+	"web_url_prefix": "/api/v1",
+	"web_cors": "http://localhost:3000"
 }

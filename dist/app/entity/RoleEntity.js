@@ -5,6 +5,7 @@ const persistence_1 = require("@micro-fleet/persistence");
 class RoleEntity extends persistence_1.EntityBase {
     constructor() {
         super(...arguments);
+        this.id = undefined;
         this.name = undefined;
         this.deletedAt = undefined;
     }

@@ -34,6 +34,7 @@ export class AccountEntity
 		return 'public.accounts';
 	}
 
+	public id: BigInt = undefined;
 	public username: string = undefined;
 	public password: string = undefined;
 	public loginAttempts: number = undefined;

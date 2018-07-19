@@ -1,9 +1,9 @@
 // import 'reflect-metadata';
 
-import { Types as IT, IdProviderAddOn } from '@micro-fleet/id-generator';
+import { registerIdAddOn, Types as IT, IdProviderAddOn } from '@micro-fleet/id-generator';
 import { MicroServiceBase } from '@micro-fleet/microservice';
 import { registerDbAddOn } from '@micro-fleet/persistence';
-import { AuthAddOn, Types as WT } from '@micro-fleet/web';
+import { AuthAddOn, ErrorHandlerFilter, registerWebAddOn, Types as WT } from '@micro-fleet/web';
 
 import { IAccountRepository } from './interfaces/IAccountRepository';
 import { ICivilianRepository } from './interfaces/ICivilianRepository';
@@ -38,7 +38,12 @@ class MembershipRestService extends MicroServiceBase {
 
 		// IMPORTANT - Default is `false`
 		this._configProvider.enableRemote = false;
-		registerDbAddOn();
+		this.attachAddOn(registerIdAddOn());
+		this.attachAddOn(registerDbAddOn());
+		
+		const webAddOn = registerWebAddOn();
+		webAddOn.addGlobalErrorHandler(ErrorHandlerFilter);
+		this.attachAddOn(webAddOn);
 
 		// TODO: Should have registerAuthAddOn
 		const authAddon = this._depContainer.resolve<AuthAddOn>(WT.AUTH_ADDON);

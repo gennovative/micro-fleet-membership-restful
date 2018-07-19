@@ -21,7 +21,7 @@ let RoleRepository = class RoleRepository extends persistence_1.RepositoryBase {
         super(RoleEntity_1.RoleEntity, RoleDTO_1.RoleDTO, dbConnector);
     }
     async pageAll(pageIndex, pageSize, opts = {}) {
-        opts.includeDeleted = true;
+        opts.excludeDeleted = false;
         return super.page(pageIndex, pageSize, opts);
     }
 };

@@ -6,6 +6,7 @@ const persistence_1 = require("@micro-fleet/persistence");
 class AccountEntity extends persistence_1.EntityBase {
     constructor() {
         super(...arguments);
+        this.id = undefined;
         this.username = undefined;
         this.password = undefined;
         this.loginAttempts = undefined;

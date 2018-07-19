@@ -28,7 +28,11 @@ class MembershipRestService extends microservice_1.MicroServiceBase {
         super.onStarting();
         // IMPORTANT - Default is `false`
         this._configProvider.enableRemote = false;
-        persistence_1.registerDbAddOn();
+        this.attachAddOn(id_generator_1.registerIdAddOn());
+        this.attachAddOn(persistence_1.registerDbAddOn());
+        const webAddOn = web_1.registerWebAddOn();
+        webAddOn.addGlobalErrorHandler(web_1.ErrorHandlerFilter);
+        this.attachAddOn(webAddOn);
         // TODO: Should have registerAuthAddOn
         const authAddon = this._depContainer.resolve(web_1.Types.AUTH_ADDON);
         this.attachAddOn(authAddon);

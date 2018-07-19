@@ -5,6 +5,7 @@ const persistence_1 = require("@micro-fleet/persistence");
 class CivilianEntity extends persistence_1.EntityBase {
     constructor() {
         super(...arguments);
+        this.id = undefined;
         this.fullname = undefined;
         this.birthday = undefined;
         this.gender = undefined;

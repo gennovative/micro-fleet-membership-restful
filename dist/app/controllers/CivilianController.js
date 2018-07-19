@@ -33,6 +33,12 @@ let CivilianController = class CivilianController extends web_1.RestControllerBa
     get trans() {
         return CivilianDTO_1.CivilianDTO.translator;
     }
+    /**
+     * For testing this endpoint.
+     */
+    ping(req, res) {
+        this.ok(res, 'pong');
+    }
     //#region Basic CRUD operations
     /**
      * GET /civilians/countAll
@@ -157,13 +163,19 @@ let CivilianController = class CivilianController extends web_1.RestControllerBa
     }
 };
 __decorate([
+    web_1.decorators.ALL('ping'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], CivilianController.prototype, "ping", null);
+__decorate([
     web_1.decorators.GET('countAll'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], CivilianController.prototype, "countAll", null);
 __decorate([
-    web_1.decorators.POST(),
+    web_1.decorators.POST('/'),
     web_1.decorators.model({ ModelClass: CivilianDTO_1.CivilianDTO }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
@@ -206,7 +218,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CivilianController.prototype, "page", null);
 __decorate([
-    web_1.decorators.PATCH(),
+    web_1.decorators.PATCH('/'),
     web_1.decorators.model({
         ModelClass: CivilianDTO_1.CivilianDTO,
         isPartial: true
@@ -216,19 +228,18 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CivilianController.prototype, "patch", null);
 __decorate([
-    web_1.decorators.PUT(),
+    web_1.decorators.PUT('/'),
     web_1.decorators.model({ ModelClass: CivilianDTO_1.CivilianDTO }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], CivilianController.prototype, "update", null);
 CivilianController = __decorate([
-    common_1.injectable(),
     web_1.decorators.controller('civilians'),
     web_1.decorators.authorized(),
     __param(0, common_1.inject(Types_1.Types.CIVILIAN_REPO)),
     __param(1, common_1.inject(id_generator_1.Types.ID_PROVIDER)),
     __metadata("design:paramtypes", [Object, id_generator_1.IdProviderAddOn])
 ], CivilianController);
-exports.CivilianController = CivilianController;
+exports.default = CivilianController;
 //# sourceMappingURL=CivilianController.js.map

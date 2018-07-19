@@ -1,7 +1,7 @@
 import { QueryBuilder } from 'objection';
 import * as scrypt from 'scrypt';
 import { inject, injectable } from '@micro-fleet/common';
-import { RepositoryBase, IDatabaseConnector, RepositoryCreateOptions,
+import { SoftDelRepositoryBase, IDatabaseConnector, RepositoryCreateOptions,
 	Types as PerTypes } from '@micro-fleet/persistence';
 
 import { AccountEntity } from '../entity/AccountEntity';
@@ -11,7 +11,7 @@ import { IAccountRepository } from '../interfaces/IAccountRepository';
 
 @injectable()
 export class AccountRepository
-	extends RepositoryBase<AccountEntity, AccountDTO>
+	extends SoftDelRepositoryBase<AccountEntity, AccountDTO>
 	implements IAccountRepository {
 
 	constructor(

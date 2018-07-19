@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as joi from 'joi';
 
-import { injectable, inject, PagedArray, ModelAutoMapper } from '@micro-fleet/common';
+import { inject, PagedArray, ModelAutoMapper } from '@micro-fleet/common';
 import { RestControllerBase, decorators as d } from '@micro-fleet/web';
 import { IdProviderAddOn, Types as IT } from '@micro-fleet/id-generator';
 
@@ -10,10 +10,9 @@ import { IRoleRepository } from '../interfaces/IRoleRepository';
 import { Types as T } from '../constants/Types';
 
 
-@injectable()
 @d.controller('roles')
-@d.authorized()
-export class RoleController extends RestControllerBase {
+// @d.authorized()
+export default class RoleController extends RestControllerBase {
 
 	//#region Getters & Setters
 
@@ -36,6 +35,15 @@ export class RoleController extends RestControllerBase {
 	}
 
 
+	/**
+	 * For testing this endpoint.
+	 */
+	@d.ALL('ping')
+	public ping(req: express.Request, res: express.Response) {
+		this.ok(res, 'pong');
+	}
+
+
 	//#region Basic CRUD operations
 	
 	/**
@@ -50,7 +58,7 @@ export class RoleController extends RestControllerBase {
 	/**
 	 * POST /roles
 	 */
-	@d.POST()
+	@d.POST('/')
 	@d.model({ ModelClass: RoleDTO })
 	public async create(req: express.Request, res: express.Response) {
 		const dto = this.trans.merge(req['model'], {
@@ -131,7 +139,7 @@ export class RoleController extends RestControllerBase {
 	/**
 	 * PATCH /roles
 	 */
-	@d.PATCH()
+	@d.PATCH('/')
 	@d.model({
 		ModelClass: RoleDTO,
 		isPartial: true
@@ -149,7 +157,7 @@ export class RoleController extends RestControllerBase {
 	/**
 	 * PUT /roles
 	 */
-	@d.PUT()
+	@d.PUT('/')
 	@d.model({ ModelClass: RoleDTO })
 	public async update(req: express.Request, res: express.Response) {
 		const dto = req['mode'] as RoleDTO;

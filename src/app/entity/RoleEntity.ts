@@ -15,6 +15,7 @@ export class RoleEntity
 		return 'public.account_roles';
 	}
 
+	public id: BigInt = undefined;
 	public name: string = undefined;
 	public deletedAt: Date = undefined;
 }
