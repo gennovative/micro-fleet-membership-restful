@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const joi = require("joi");
-const back_lib_common_contracts_1 = require("back-lib-common-contracts");
+const common_1 = require("@micro-fleet/common");
 const isSupportTenancy = false;
 /**
  * Defined available states on a account.
@@ -87,10 +87,26 @@ class AccountDTO {
          * Gets the FK of Civilian Id.
          */
         // public readonly civilianId: BigSInt = undefined;
+        /**
+         * Gets account role.
+         */
+        this.role = undefined;
+        /**
+         * Gets account role Id.
+         */
+        this.roleId = undefined;
+        /**
+         * Gets account refresh token.
+         */
+        this.refreshToken = undefined;
+        /**
+         * Gets account refresh token.
+         */
+        this.tokenExp = undefined;
     }
 }
 exports.AccountDTO = AccountDTO;
-AccountDTO.validator = back_lib_common_contracts_1.JoiModelValidator.create({
+AccountDTO.validator = common_1.JoiModelValidator.create({
     username: joi.string().min(1).max(100).required(),
     password: joi.string().min(6).max(255).required(),
     loginAttempts: joi.number().allow(null).optional(),
@@ -102,5 +118,7 @@ AccountDTO.validator = back_lib_common_contracts_1.JoiModelValidator.create({
     deletedAt: joi.object().type(Date, 'Date').allow(null).optional(),
     createdAt: joi.object().type(Date, 'Date').optional(),
     updatedAt: joi.object().type(Date, 'Date').optional(),
+    roleId: joi.string().required(),
 }, isSupportTenancy, false);
-AccountDTO.translator = new back_lib_common_contracts_1.ModelAutoMapper(AccountDTO, AccountDTO.validator);
+AccountDTO.translator = new common_1.ModelAutoMapper(AccountDTO, AccountDTO.validator);
+//# sourceMappingURL=AccountDTO.js.map

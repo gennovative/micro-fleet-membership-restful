@@ -1,5 +1,5 @@
 import * as joi from 'joi';
-import { JoiModelValidator, ModelAutoMapper } from 'back-lib-common-contracts';
+import { JoiModelValidator, ModelAutoMapper } from '@micro-fleet/common';
 
 const isSupportTenancy = false;
 
@@ -15,7 +15,7 @@ export class RoleDTO
 	/**
 	 * Gets role id.
 	 */
-	public readonly id: BigSInt = undefined;
+	public readonly id: BigInt = undefined;
 
 	/**
 	 * Gets role name.

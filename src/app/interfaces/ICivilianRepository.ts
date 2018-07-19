@@ -1,4 +1,4 @@
-import { IRepository } from 'back-lib-common-contracts' ;
+import { ISoftDelRepository } from '@micro-fleet/persistence' ;
 
 import { CivilianDTO } from '../dto/CivilianDTO';
 
@@ -7,5 +7,5 @@ import { CivilianDTO } from '../dto/CivilianDTO';
  * Provides methods to work with Device Group.
  */
 export interface ICivilianRepository 
-	extends IRepository<CivilianDTO> {
+	extends ISoftDelRepository<CivilianDTO> {
 }

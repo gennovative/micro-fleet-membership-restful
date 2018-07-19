@@ -1,33 +1,3 @@
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 9.6.6
--- Dumped by pg_dump version 9.6.3
-
--- Started on 2018-01-11 22:17:49
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SET check_function_bodies = false;
-SET client_min_messages = warning;
-SET row_security = off;
-
---
--- TOC entry 2146 (class 1262 OID 24576)
--- Name: membership; Type: DATABASE; Schema: -; Owner: postgres
---
-
-CREATE DATABASE "membership" WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.utf8' LC_CTYPE = 'en_US.utf8';
-
-
-ALTER DATABASE "membership" OWNER TO "postgres";
-
-\connect "membership"
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;

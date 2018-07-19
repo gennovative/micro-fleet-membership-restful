@@ -1,6 +1,7 @@
 import { Model } from 'objection';
-import { EntityBase } from 'back-lib-persistence';
-import { ModelAutoMapper } from 'back-lib-common-contracts';
+import { ModelAutoMapper } from '@micro-fleet/common';
+import { EntityBase } from '@micro-fleet/persistence';
+
 
 export class AccountEntity
 	extends EntityBase
@@ -11,7 +12,6 @@ export class AccountEntity
 	public static get relationMappings(): any {
 		// Lazy reference to avoid circular reference.
 		// `relationMappings()` is called only once for each connection.
-
 		const { RoleEntity } = require('../entity/RoleEntity');
 
 		return {
@@ -27,13 +27,11 @@ export class AccountEntity
 	}
 
 
-	private static readonly TABLE_NAME = 'public.accounts';
-
 	/**
 	 * @override
 	 */
 	public static get tableName(): string {
-		return AccountEntity.TABLE_NAME;
+		return 'public.accounts';
 	}
 
 	public username: string = undefined;
@@ -47,7 +45,7 @@ export class AccountEntity
 	public deletedAt: Date = undefined;
 	public createdAt: Date = undefined;
 	public updatedAt: Date = undefined;
-	public roleId: BigSInt = undefined;
+	public roleId: BigInt = undefined;
 	public refreshToken: string = undefined;
 	public tokenExp: Date = undefined;
 	// public civilianId: BigSInt = undefined;

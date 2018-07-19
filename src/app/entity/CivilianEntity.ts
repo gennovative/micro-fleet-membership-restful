@@ -1,6 +1,5 @@
-import { Model } from 'objection';
-import { EntityBase } from 'back-lib-persistence';
-import { ModelAutoMapper } from 'back-lib-common-contracts';
+import { ModelAutoMapper } from '@micro-fleet/common';
+import { EntityBase } from '@micro-fleet/persistence';
 
 export class CivilianEntity
 	extends EntityBase
@@ -8,32 +7,12 @@ export class CivilianEntity
 
 	public static translator: ModelAutoMapper<CivilianEntity>;
 
-	// public static get relationMappings(): any {
-	// 	// Lazy reference to avoid circular reference.
-	// 	// `relationMappings()` is called only once for each connection.
-
-	// 	const { DeviceGroupEntity } = require('../entity/DeviceGroupEntity');
-
-	// 	return {
-	// 		belongtoDeviceGroups: {
-	// 			relation: Model.HasOneRelation,
-	// 			modelClass: DeviceGroupEntity,
-	// 			join: {
-	// 				from: 'public.devices.group_id',
-	// 				to: 'public.device_groups.id'
-	// 			}
-	// 		}
-	// 	};
-	// }
-
-
-	private static readonly TABLE_NAME = 'public.civilians';
 
 	/**
 	 * @override
 	 */
 	public static get tableName(): string {
-		return CivilianEntity.TABLE_NAME;
+		return 'public.civilians';
 	}
 
 	public fullname: string = undefined;
@@ -46,6 +25,7 @@ export class CivilianEntity
 	public addressLong: number = undefined;
 	public maritalStatus: string = undefined;
 	public cityId: string = undefined;
+	public deletedAt: Date = undefined;
 }
 
 CivilianEntity.translator = new ModelAutoMapper(CivilianEntity);

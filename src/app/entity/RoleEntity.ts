@@ -1,6 +1,5 @@
-import { Model } from 'objection';
-import { EntityBase } from 'back-lib-persistence';
-import { ModelAutoMapper } from 'back-lib-common-contracts';
+import { ModelAutoMapper } from '@micro-fleet/common';
+import { EntityBase } from '@micro-fleet/persistence';
 
 export class RoleEntity
 	extends EntityBase
@@ -8,16 +7,16 @@ export class RoleEntity
 
 	public static translator: ModelAutoMapper<RoleEntity>;
 
-	private static readonly TABLE_NAME = 'public.account_roles';
 
 	/**
 	 * @override
 	 */
 	public static get tableName(): string {
-		return RoleEntity.TABLE_NAME;
+		return 'public.account_roles';
 	}
 
 	public name: string = undefined;
+	public deletedAt: Date = undefined;
 }
 
 RoleEntity.translator = new ModelAutoMapper(RoleEntity);

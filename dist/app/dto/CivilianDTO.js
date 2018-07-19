@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const joi = require("joi");
-const back_lib_common_contracts_1 = require("back-lib-common-contracts");
+const common_1 = require("@micro-fleet/common");
 const isSupportTenancy = false;
 /**
  * Defined available states on a account.
@@ -83,7 +83,7 @@ class CivilianDTO {
     }
 }
 exports.CivilianDTO = CivilianDTO;
-CivilianDTO.validator = back_lib_common_contracts_1.JoiModelValidator.create({
+CivilianDTO.validator = common_1.JoiModelValidator.create({
     fullname: joi.string().min(1).max(255).required(),
     birthday: joi.object().type(Date, 'Date').allow(null).optional(),
     gender: joi.string().min(1).max(20).optional(),
@@ -95,4 +95,5 @@ CivilianDTO.validator = back_lib_common_contracts_1.JoiModelValidator.create({
     maritalStatus: joi.string().only(MaritalStatus.SINGLE, MaritalStatus.DEVORCED, MaritalStatus.MARRIED, MaritalStatus.SEPARATED, MaritalStatus.WIDOWED).allow(null).optional(),
     cityId: joi.string().allow(null).optional(),
 }, isSupportTenancy, false);
-CivilianDTO.translator = new back_lib_common_contracts_1.ModelAutoMapper(CivilianDTO, CivilianDTO.validator);
+CivilianDTO.translator = new common_1.ModelAutoMapper(CivilianDTO, CivilianDTO.validator);
+//# sourceMappingURL=CivilianDTO.js.map

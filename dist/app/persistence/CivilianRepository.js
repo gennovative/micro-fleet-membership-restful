@@ -12,17 +12,19 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const back_lib_common_util_1 = require("back-lib-common-util");
-const back_lib_persistence_1 = require("back-lib-persistence");
+const common_1 = require("@micro-fleet/common");
+const persistence_1 = require("@micro-fleet/persistence");
 const CivilianEntity_1 = require("../entity/CivilianEntity");
-let CivilianRepository = class CivilianRepository extends back_lib_persistence_1.RepositoryBase {
+const CivilianDTO_1 = require("../dto/CivilianDTO");
+let CivilianRepository = class CivilianRepository extends persistence_1.RepositoryBase {
     constructor(dbConnector) {
-        super(CivilianEntity_1.CivilianEntity, dbConnector);
+        super(CivilianEntity_1.CivilianEntity, CivilianDTO_1.CivilianDTO, dbConnector);
     }
 };
 CivilianRepository = __decorate([
-    back_lib_common_util_1.injectable(),
-    __param(0, back_lib_common_util_1.inject(back_lib_persistence_1.Types.DB_CONNECTOR)),
+    common_1.injectable(),
+    __param(0, common_1.inject(persistence_1.Types.DB_CONNECTOR)),
     __metadata("design:paramtypes", [Object])
 ], CivilianRepository);
 exports.CivilianRepository = CivilianRepository;
+//# sourceMappingURL=CivilianRepository.js.map

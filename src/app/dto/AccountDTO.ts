@@ -1,5 +1,5 @@
 import * as joi from 'joi';
-import { JoiModelValidator, ModelAutoMapper } from 'back-lib-common-contracts';
+import { JoiModelValidator, ModelAutoMapper } from '@micro-fleet/common';
 
 const isSupportTenancy = false;
 
@@ -46,7 +46,7 @@ export class AccountDTO
 	/**
 	 * Gets account id.
 	 */
-	public readonly id: BigSInt = undefined;
+	public readonly id: BigInt = undefined;
 
 	/**
 	 * Gets account username.
@@ -107,6 +107,26 @@ export class AccountDTO
 	 * Gets the FK of Civilian Id.
 	 */
 	// public readonly civilianId: BigSInt = undefined;
+	
+	/**
+	 * Gets account role.
+	 */
+	public role: string = undefined;
+	
+	/**
+	 * Gets account role Id.
+	 */
+	public readonly roleId: BigInt = undefined;
+
+	/**
+	 * Gets account refresh token.
+	 */
+	public refreshToken: string = undefined;
+
+	/**
+	 * Gets account refresh token.
+	 */
+	public tokenExp: Date = undefined;
 }
 
 AccountDTO.validator = JoiModelValidator.create({
@@ -121,7 +141,7 @@ AccountDTO.validator = JoiModelValidator.create({
 	deletedAt: joi.object().type(Date, 'Date').allow(null).optional(),
 	createdAt: joi.object().type(Date, 'Date').optional(),
 	updatedAt: joi.object().type(Date, 'Date').optional(),
-	// civilianId: joi.number().required(),
+	roleId: joi.string().required(),
 }, isSupportTenancy, false);
 
 AccountDTO.translator = new ModelAutoMapper(AccountDTO, AccountDTO.validator);

@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const objection_1 = require("objection");
-const back_lib_persistence_1 = require("back-lib-persistence");
-const back_lib_common_contracts_1 = require("back-lib-common-contracts");
-class AccountEntity extends back_lib_persistence_1.EntityBase {
+const common_1 = require("@micro-fleet/common");
+const persistence_1 = require("@micro-fleet/persistence");
+class AccountEntity extends persistence_1.EntityBase {
     constructor() {
         super(...arguments);
         this.username = undefined;
@@ -41,9 +41,9 @@ class AccountEntity extends back_lib_persistence_1.EntityBase {
      * @override
      */
     static get tableName() {
-        return AccountEntity.TABLE_NAME;
+        return 'public.accounts';
     }
 }
-AccountEntity.TABLE_NAME = 'public.accounts';
 exports.AccountEntity = AccountEntity;
-AccountEntity.translator = new back_lib_common_contracts_1.ModelAutoMapper(AccountEntity);
+AccountEntity.translator = new common_1.ModelAutoMapper(AccountEntity);
+//# sourceMappingURL=AccountEntity.js.map

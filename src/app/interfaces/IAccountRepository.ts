@@ -1,13 +1,13 @@
-import { IRepository } from 'back-lib-common-contracts' ;
+import { ISoftDelRepository } from '@micro-fleet/persistence' ;
 
-import { AccountDTO } from 'back-lib-membership-contracts';
+import { AccountDTO } from '../dto/AccountDTO';
 
 
 /**
  * Provides methods to work with Device Group.
  */
 export interface IAccountRepository 
-	extends IRepository<AccountDTO> {
+	extends ISoftDelRepository<AccountDTO> {
 
 	/**
 	 * Gets an account by username and password.
@@ -15,4 +15,15 @@ export interface IAccountRepository
 	 * @param password Raw unhashed password.
 	 */
 	findByCredentials(username: string, password: string): Promise<AccountDTO>;
+
+	/**
+	 * Checks if refresh token exists.
+	 */
+	checkRefresh(id: BigInt, refreshToken: string): Promise<boolean>;
+
+	/**
+	 * Changes password for specified account id.
+	 * @param password The raw unhashed password.
+	 */
+	changePassword(id: BigInt, password: string): Promise<boolean>;
 }

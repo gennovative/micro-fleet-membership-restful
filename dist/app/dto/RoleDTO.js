@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const joi = require("joi");
-const back_lib_common_contracts_1 = require("back-lib-common-contracts");
+const common_1 = require("@micro-fleet/common");
 const isSupportTenancy = false;
 /**
  * Represents a group of setting items, can be assigned to programs or program groups.
@@ -19,7 +19,8 @@ class RoleDTO {
     }
 }
 exports.RoleDTO = RoleDTO;
-RoleDTO.validator = back_lib_common_contracts_1.JoiModelValidator.create({
+RoleDTO.validator = common_1.JoiModelValidator.create({
     name: joi.string().min(1).max(255).required()
 }, isSupportTenancy, false);
-RoleDTO.translator = new back_lib_common_contracts_1.ModelAutoMapper(RoleDTO, RoleDTO.validator);
+RoleDTO.translator = new common_1.ModelAutoMapper(RoleDTO, RoleDTO.validator);
+//# sourceMappingURL=RoleDTO.js.map

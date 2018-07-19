@@ -1,7 +1,0 @@
-export = {
-	trailpack: {
-		disabled: [
-			'repl'
-		]
-	}
-};

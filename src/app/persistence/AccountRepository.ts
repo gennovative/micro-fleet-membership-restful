@@ -1,12 +1,13 @@
 import { QueryBuilder } from 'objection';
 import * as scrypt from 'scrypt';
-const moment = require('moment');
-import { inject, injectable, Guard } from 'back-lib-common-util';
-import { RepositoryBase, IDatabaseConnector, Types as PerTypes } from 'back-lib-persistence';
-import { AccountDTO, IAccountRepository } from 'back-lib-membership-contracts';
+import { inject, injectable } from '@micro-fleet/common';
+import { RepositoryBase, IDatabaseConnector, RepositoryCreateOptions,
+	Types as PerTypes } from '@micro-fleet/persistence';
 
 import { AccountEntity } from '../entity/AccountEntity';
-import { isMaster } from 'cluster';
+import { AccountDTO } from '../dto/AccountDTO';
+import { IAccountRepository } from '../interfaces/IAccountRepository';
+
 
 @injectable()
 export class AccountRepository
@@ -16,13 +17,13 @@ export class AccountRepository
 	constructor(
 		@inject(PerTypes.DB_CONNECTOR) dbConnector: IDatabaseConnector,
 	) {
-		super(AccountEntity, dbConnector);
+		super(AccountEntity, AccountDTO, dbConnector);
 	}
 
 	/**
 	 * @override
 	 */
-	public async create(model: AccountDTO, opts?): Promise<AccountDTO & AccountDTO[]> {
+	public async create(model: AccountDTO, opts?: RepositoryCreateOptions): Promise<AccountDTO & AccountDTO[]> {
 		let queryProm: Promise<AccountEntity> = this._processor.executeQuery((builder: QueryBuilder<any>) => {
 			let query = builder
 				.select('accounts.*', 'account_roles.name as role')
@@ -34,7 +35,7 @@ export class AccountRepository
 		});
 		let account = await queryProm;
 		if (!account[0]) {
-			const passBuffer = await this.hash(model.password);
+			const passBuffer = await this._hash(model.password);
 			const password = passBuffer.toString('base64');
 			model = AccountDTO.translator.merge(model, {
 				password
@@ -57,7 +58,7 @@ export class AccountRepository
 		const account = await queryProm;
 		if (account[0]) {
 			const passBuffer = Buffer.from(account[0].password, 'base64');
-			const isMatched = await this.verify(passBuffer, password);
+			const isMatched = await this._verify(passBuffer, password);
 			let accoutnDto = this._processor.toDTO(account[0], false);
 			accoutnDto.role = account[0]['role'];
 			return (isMatched ? accoutnDto : null);
@@ -65,7 +66,7 @@ export class AccountRepository
 		return null;
 	}
 
-	public async checkRefresh(id, refreshToken): Promise<Boolean> {
+	public async checkRefresh(id: BigInt, refreshToken: string): Promise<boolean> {
 		let queryProm: Promise<AccountEntity> = this._processor.executeQuery((builder: QueryBuilder<any>) => {
 			let query = builder.where({
 				refresh_token: refreshToken,
@@ -74,27 +75,24 @@ export class AccountRepository
 			return query;
 		});
 		const account = await queryProm;
-		let now = moment().format();
-		let isValidDate = true;
-		return (account && account[0] ? true : false);
+		return (account && account[0]);
 	}
 
-	private async hash(password: string): Promise<Buffer> {
+	private async _hash(password: string): Promise<Buffer> {
 		let params = await scrypt.params(0.1);
 		return await scrypt.kdf(password, params);
 	}
 
-	private verify(kdf: Buffer, key: string): Promise<boolean> {
+	private _verify(kdf: Buffer, key: string): Promise<boolean> {
 		return scrypt.verifyKdf(kdf, key);
 	}
 
-	public async changePassword(model, opts?): Promise<Partial<AccountDTO> & Partial<AccountDTO>[]> {
-		const passBuffer = await this.hash(model.password);
-		const password = passBuffer.toString('base64');
-		let id = model.id,
-			username = model.username,
-			status = model.status,
-			roleId = model.roleId;
-		return this.patch({ id, username, password, status, roleId });
+	public async changePassword(id: BigInt, password: string): Promise<boolean> {
+		const passBuffer = await this._hash(password);
+		const passStr = passBuffer.toString('base64');
+		return this.patch({ id, password: passStr })
+			.then((props: Partial<AccountDTO>) => {
+				return (!!props);
+			});
 	}
 }

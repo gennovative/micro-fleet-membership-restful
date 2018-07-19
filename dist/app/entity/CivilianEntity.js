@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const back_lib_persistence_1 = require("back-lib-persistence");
-const back_lib_common_contracts_1 = require("back-lib-common-contracts");
-class CivilianEntity extends back_lib_persistence_1.EntityBase {
+const common_1 = require("@micro-fleet/common");
+const persistence_1 = require("@micro-fleet/persistence");
+class CivilianEntity extends persistence_1.EntityBase {
     constructor() {
         super(...arguments);
         this.fullname = undefined;
@@ -15,29 +15,15 @@ class CivilianEntity extends back_lib_persistence_1.EntityBase {
         this.addressLong = undefined;
         this.maritalStatus = undefined;
         this.cityId = undefined;
+        this.deletedAt = undefined;
     }
     /**
      * @override
      */
     static get tableName() {
-        return CivilianEntity.TABLE_NAME;
+        return 'public.civilians';
     }
 }
-// public static get relationMappings(): any {
-// 	// Lazy reference to avoid circular reference.
-// 	// `relationMappings()` is called only once for each connection.
-// 	const { DeviceGroupEntity } = require('../entity/DeviceGroupEntity');
-// 	return {
-// 		belongtoDeviceGroups: {
-// 			relation: Model.HasOneRelation,
-// 			modelClass: DeviceGroupEntity,
-// 			join: {
-// 				from: 'public.devices.group_id',
-// 				to: 'public.device_groups.id'
-// 			}
-// 		}
-// 	};
-// }
-CivilianEntity.TABLE_NAME = 'public.civilians';
 exports.CivilianEntity = CivilianEntity;
-CivilianEntity.translator = new back_lib_common_contracts_1.ModelAutoMapper(CivilianEntity);
+CivilianEntity.translator = new common_1.ModelAutoMapper(CivilianEntity);
+//# sourceMappingURL=CivilianEntity.js.map
