@@ -5,13 +5,13 @@ import { inject, PagedArray, ModelAutoMapper } from '@micro-fleet/common';
 import { RestControllerBase, decorators as d } from '@micro-fleet/web';
 import { IdProviderAddOn, Types as IT } from '@micro-fleet/id-generator';
 
-import { AccountDTO } from '../dto/AccountDTO';
+import { AccountDTO } from '../models/dto/AccountDTO';
 import { IAccountRepository } from '../interfaces/IAccountRepository';
 import { Types as T } from '../constants/Types';
 
 
 @d.controller('accounts')
-// @d.authorized()
+@d.authorized()
 export default class AccountController extends RestControllerBase {
 
 	//#region Getters & Setters

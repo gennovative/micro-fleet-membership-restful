@@ -73,8 +73,8 @@ ALTER TABLE "account_roles" OWNER TO "postgres";
 CREATE TABLE "accounts" (
     "id" bigint NOT NULL,
     "username" character varying(100) NOT NULL,
-    "password" character varying(1000) NOT NULL,
-    "login_attempts" integer NOT NULL,
+    "password" character varying(2000) NOT NULL,
+    "login_attempts" integer,
     "last_attempt_at" timestamp without time zone,
     "last_login_at" timestamp without time zone,
     "last_login_from" character varying(45),
@@ -84,7 +84,7 @@ CREATE TABLE "accounts" (
     "created_at" timestamp without time zone,
     "updated_at" timestamp without time zone,
 	"role_id" bigint,
-	"refresh_token" character varying(255),
+	"refresh_token" character varying(2000),
 	"token_exp" timestamp without time zone,
     CONSTRAINT "status_check" CHECK ((("status")::"text" = ANY (ARRAY[('active'::character varying)::"text", ('disabled'::character varying)::"text", ('locked'::character varying)::"text", ('banned'::character varying)::"text"])))
 );

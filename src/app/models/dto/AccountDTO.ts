@@ -106,7 +106,7 @@ export class AccountDTO
 	/**
 	 * Gets the FK of Civilian Id.
 	 */
-	// public readonly civilianId: BigSInt = undefined;
+	public readonly civilianId: BigInt = undefined;
 	
 	/**
 	 * Gets account role.

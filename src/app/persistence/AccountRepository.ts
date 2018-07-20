@@ -4,8 +4,8 @@ import { inject, injectable } from '@micro-fleet/common';
 import { SoftDelRepositoryBase, IDatabaseConnector, RepositoryCreateOptions,
 	Types as PerTypes } from '@micro-fleet/persistence';
 
-import { AccountEntity } from '../entity/AccountEntity';
-import { AccountDTO } from '../dto/AccountDTO';
+import { AccountEntity } from '../models/entity/AccountEntity';
+import { AccountDTO } from '../models/dto/AccountDTO';
 import { IAccountRepository } from '../interfaces/IAccountRepository';
 
 

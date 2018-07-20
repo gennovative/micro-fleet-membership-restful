@@ -5,7 +5,7 @@ import { inject, PagedArray, ModelAutoMapper } from '@micro-fleet/common';
 import { RestControllerBase, decorators as d } from '@micro-fleet/web';
 import { IdProviderAddOn, Types as IT } from '@micro-fleet/id-generator';
 
-import { CivilianDTO } from '../dto/CivilianDTO';
+import { CivilianDTO } from '../models/dto/CivilianDTO';
 import { ICivilianRepository } from '../interfaces/ICivilianRepository';
 import { Types as T } from '../constants/Types';
 

@@ -14,8 +14,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@micro-fleet/common");
 const persistence_1 = require("@micro-fleet/persistence");
-const CivilianEntity_1 = require("../entity/CivilianEntity");
-const CivilianDTO_1 = require("../dto/CivilianDTO");
+const CivilianEntity_1 = require("../models/entity/CivilianEntity");
+const CivilianDTO_1 = require("../models/dto/CivilianDTO");
 let CivilianRepository = class CivilianRepository extends persistence_1.SoftDelRepositoryBase {
     constructor(dbConnector) {
         super(CivilianEntity_1.CivilianEntity, CivilianDTO_1.CivilianDTO, dbConnector);

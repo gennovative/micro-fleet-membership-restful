@@ -14,8 +14,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@micro-fleet/common");
 const persistence_1 = require("@micro-fleet/persistence");
-const RoleEntity_1 = require("../entity/RoleEntity");
-const RoleDTO_1 = require("../dto/RoleDTO");
+const RoleEntity_1 = require("../models/entity/RoleEntity");
+const RoleDTO_1 = require("../models/dto/RoleDTO");
 let RoleRepository = class RoleRepository extends persistence_1.RepositoryBase {
     constructor(dbConnector) {
         super(RoleEntity_1.RoleEntity, RoleDTO_1.RoleDTO, dbConnector);

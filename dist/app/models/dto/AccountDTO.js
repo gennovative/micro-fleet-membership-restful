@@ -86,7 +86,7 @@ class AccountDTO {
         /**
          * Gets the FK of Civilian Id.
          */
-        // public readonly civilianId: BigSInt = undefined;
+        this.civilianId = undefined;
         /**
          * Gets account role.
          */

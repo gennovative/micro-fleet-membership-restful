@@ -5,13 +5,13 @@ import { inject, PagedArray, ModelAutoMapper } from '@micro-fleet/common';
 import { RestControllerBase, decorators as d } from '@micro-fleet/web';
 import { IdProviderAddOn, Types as IT } from '@micro-fleet/id-generator';
 
-import { RoleDTO } from '../dto/RoleDTO';
+import { RoleDTO } from '../models/dto/RoleDTO';
 import { IRoleRepository } from '../interfaces/IRoleRepository';
 import { Types as T } from '../constants/Types';
 
 
 @d.controller('roles')
-// @d.authorized()
+@d.authorized()
 export default class RoleController extends RestControllerBase {
 
 	//#region Getters & Setters

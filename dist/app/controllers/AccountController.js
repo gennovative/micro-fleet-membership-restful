@@ -17,11 +17,9 @@ const joi = require("joi");
 const common_1 = require("@micro-fleet/common");
 const web_1 = require("@micro-fleet/web");
 const id_generator_1 = require("@micro-fleet/id-generator");
-const AccountDTO_1 = require("../dto/AccountDTO");
+const AccountDTO_1 = require("../models/dto/AccountDTO");
 const Types_1 = require("../constants/Types");
-let AccountController = 
-// @d.authorized()
-class AccountController extends web_1.RestControllerBase {
+let AccountController = class AccountController extends web_1.RestControllerBase {
     //#endregion Getters & Setters
     constructor(_accRepo, _idGen) {
         super();
@@ -237,9 +235,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AccountController.prototype, "update", null);
 AccountController = __decorate([
-    web_1.decorators.controller('accounts')
-    // @d.authorized()
-    ,
+    web_1.decorators.controller('accounts'),
+    web_1.decorators.authorized(),
     __param(0, common_1.inject(Types_1.Types.ACCOUNT_REPO)),
     __param(1, common_1.inject(id_generator_1.Types.ID_PROVIDER)),
     __metadata("design:paramtypes", [Object, id_generator_1.IdProviderAddOn])

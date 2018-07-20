@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const scrypt = require("scrypt");
 const common_1 = require("@micro-fleet/common");
 const persistence_1 = require("@micro-fleet/persistence");
-const AccountEntity_1 = require("../entity/AccountEntity");
-const AccountDTO_1 = require("../dto/AccountDTO");
+const AccountEntity_1 = require("../models/entity/AccountEntity");
+const AccountDTO_1 = require("../models/dto/AccountDTO");
 let AccountRepository = class AccountRepository extends persistence_1.SoftDelRepositoryBase {
     constructor(dbConnector) {
         super(AccountEntity_1.AccountEntity, AccountDTO_1.AccountDTO, dbConnector);

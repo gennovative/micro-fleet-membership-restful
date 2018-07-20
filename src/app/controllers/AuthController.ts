@@ -2,6 +2,8 @@ import * as express from 'express';
 import { inject } from '@micro-fleet/common';
 import { RestControllerBase, AuthAddOn, decorators as d, Types as WT } from '@micro-fleet/web';
 
+import { AccountDTO } from '../models/dto/AccountDTO';
+import { LoginViewModel } from '../models/view/LoginViewModel';
 import { IAccountRepository } from '../interfaces/IAccountRepository';
 import { Types as T } from '../constants/Types';
 
@@ -26,29 +28,35 @@ export default class AuthController extends RestControllerBase {
 	}
 
 	@d.POST('login')
+	@d.model({ ModelClass: LoginViewModel })
 	public async authenticate(req: express.Request, res: express.Response) {
-		let body = req.body;
-		let account = await this.repo.findByCredentials(body.username, body.password);
-		if (account) {
-			let [token, refreshToken] = await Promise.all([
-				this._authAddon.createToken(account, false),
-				this._authAddon.createToken(account, true)
-			]);
-			// let token = await this._authAddon.createToken(account, false);
-			// let refreshToken = await this._authAddon.createToken(account, true);
-			let loggedAccount = await this.repo.patch({ id: account.id, refreshToken });
-			if (loggedAccount) {
-				return this.ok(res, {
-					id: account.id,
-					username: account.username,
-					role: account.role,
-					token: token,
-					refreshToken: refreshToken
-				});
-			}
-			return this.internalError(res, 'An error occured!');
+		const credentials = req['model'];
+		const account: AccountDTO = await this.repo.findByCredentials(credentials.username, credentials.password);
+		if (!account) {
+			// TODO 1: Should increase loginAttempt
+			// TODO 2: Should lock when exceed login limits
+			return this.unauthorized(res);
 		}
-		return this.unauthorized(res);
+
+		const payload: any = {
+			accountId: account.id,
+			username: account.username,
+			role: account.role,
+		};
+		const [token, refreshToken] = await Promise.all([
+			this._authAddon.createToken(payload, false),
+			this._authAddon.createToken(payload, true)
+		]);
+		const loggedAccount = await this.repo.patch({ id: account.id, refreshToken });
+		if (loggedAccount) {
+			return this.ok(res, {
+				username: account.username,
+				role: account.role,
+				token: token,
+				refreshToken: refreshToken
+			});
+		}
+		return this.internalError(res, 'An error occured!');
 		//TODO: Should return only username, fullname and roles.
 	}
 

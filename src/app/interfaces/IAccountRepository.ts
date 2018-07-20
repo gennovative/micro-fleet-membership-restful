@@ -1,6 +1,6 @@
 import { ISoftDelRepository } from '@micro-fleet/persistence' ;
 
-import { AccountDTO } from '../dto/AccountDTO';
+import { AccountDTO } from '../models/dto/AccountDTO';
 
 
 /**

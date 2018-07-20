@@ -18,8 +18,7 @@
 		"@micro-fleet/common": "~1.2",
 		"@micro-fleet/id-generator": "~1.0",
 		"@micro-fleet/microservice": "~1.2",
-		"@micro-fleet/persistence": "2.0",
-		"@micro-fleet/service-communication": "~0.2",
+		"@micro-fleet/persistence": "~2.0",
 		"@micro-fleet/web": "~1.0",
 		"scrypt": "~6.0"
 	},

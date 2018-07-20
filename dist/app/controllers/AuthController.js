@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const common_1 = require("@micro-fleet/common");
 const web_1 = require("@micro-fleet/web");
+const LoginViewModel_1 = require("../models/view/LoginViewModel");
 const Types_1 = require("../constants/Types");
 let AuthController = class AuthController extends web_1.RestControllerBase {
     //#endregion Getters & Setters
@@ -28,28 +29,32 @@ let AuthController = class AuthController extends web_1.RestControllerBase {
         return this._accRepo;
     }
     async authenticate(req, res) {
-        let body = req.body;
-        let account = await this.repo.findByCredentials(body.username, body.password);
-        if (account) {
-            let [token, refreshToken] = await Promise.all([
-                this._authAddon.createToken(account, false),
-                this._authAddon.createToken(account, true)
-            ]);
-            // let token = await this._authAddon.createToken(account, false);
-            // let refreshToken = await this._authAddon.createToken(account, true);
-            let loggedAccount = await this.repo.patch({ id: account.id, refreshToken });
-            if (loggedAccount) {
-                return this.ok(res, {
-                    id: account.id,
-                    username: account.username,
-                    role: account.role,
-                    token: token,
-                    refreshToken: refreshToken
-                });
-            }
-            return this.internalError(res, 'An error occured!');
+        const credentials = req['model'];
+        const account = await this.repo.findByCredentials(credentials.username, credentials.password);
+        if (!account) {
+            // TODO 1: Should increase loginAttempt
+            // TODO 2: Should lock when exceed login limits
+            return this.unauthorized(res);
         }
-        return this.unauthorized(res);
+        const payload = {
+            accountId: account.id,
+            username: account.username,
+            role: account.role,
+        };
+        const [token, refreshToken] = await Promise.all([
+            this._authAddon.createToken(payload, false),
+            this._authAddon.createToken(payload, true)
+        ]);
+        const loggedAccount = await this.repo.patch({ id: account.id, refreshToken });
+        if (loggedAccount) {
+            return this.ok(res, {
+                username: account.username,
+                role: account.role,
+                token: token,
+                refreshToken: refreshToken
+            });
+        }
+        return this.internalError(res, 'An error occured!');
         //TODO: Should return only username, fullname and roles.
     }
     async refreshToken(req, res) {
@@ -69,6 +74,7 @@ let AuthController = class AuthController extends web_1.RestControllerBase {
 };
 __decorate([
     web_1.decorators.POST('login'),
+    web_1.decorators.model({ ModelClass: LoginViewModel_1.LoginViewModel }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)

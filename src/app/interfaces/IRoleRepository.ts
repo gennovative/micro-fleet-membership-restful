@@ -1,7 +1,7 @@
 import { PagedArray } from '@micro-fleet/common';
 import { IRepository, RepositoryPageOptions } from '@micro-fleet/persistence' ;
 
-import { RoleDTO } from '../dto/RoleDTO';
+import { RoleDTO } from '../models/dto/RoleDTO';
 
 /**
  * Provides methods to work with Device Group.

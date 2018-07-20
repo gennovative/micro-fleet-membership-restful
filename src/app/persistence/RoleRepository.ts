@@ -2,8 +2,8 @@ import { inject, injectable, PagedArray } from '@micro-fleet/common';
 import { RepositoryBase, IDatabaseConnector, RepositoryPageOptions,
 	Types as PerTypes } from '@micro-fleet/persistence';
 
-import { RoleEntity } from '../entity/RoleEntity';
-import { RoleDTO } from '../dto/RoleDTO';
+import { RoleEntity } from '../models/entity/RoleEntity';
+import { RoleDTO } from '../models/dto/RoleDTO';
 import { IRoleRepository } from '../interfaces/IRoleRepository';
 
 

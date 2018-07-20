@@ -1,8 +1,8 @@
 import { inject, injectable } from '@micro-fleet/common';
 import { SoftDelRepositoryBase, IDatabaseConnector, Types as PerTypes } from '@micro-fleet/persistence';
 
-import { CivilianEntity } from '../entity/CivilianEntity';
-import { CivilianDTO } from '../dto/CivilianDTO';
+import { CivilianEntity } from '../models/entity/CivilianEntity';
+import { CivilianDTO } from '../models/dto/CivilianDTO';
 import { ICivilianRepository } from '../interfaces/ICivilianRepository';
 
 

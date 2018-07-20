@@ -17,7 +17,7 @@ const joi = require("joi");
 const common_1 = require("@micro-fleet/common");
 const web_1 = require("@micro-fleet/web");
 const id_generator_1 = require("@micro-fleet/id-generator");
-const CivilianDTO_1 = require("../dto/CivilianDTO");
+const CivilianDTO_1 = require("../models/dto/CivilianDTO");
 const Types_1 = require("../constants/Types");
 let CivilianController = class CivilianController extends web_1.RestControllerBase {
     //#endregion Getters & Setters
