@@ -11,23 +11,9 @@ const isSupportTenancy = false;
  */
 var MaritalStatus;
 (function (MaritalStatus) {
-    /**
-     * Account can login.
-     */
     MaritalStatus["SINGLE"] = "single";
-    /**
-     * Account cannot login and will not available to any operation.
-     */
     MaritalStatus["MARRIED"] = "married";
-    /**
-     * Account cannot login until "unlocked_at", but is still available for
-     * some operations.
-     */
     MaritalStatus["SEPARATED"] = "separated";
-    /**
-     * Account cannot login until manually unbanned, but is still available for
-     * some operations.
-     */
     MaritalStatus["DEVORCED"] = "devorced";
     MaritalStatus["WIDOWED"] = "widowed";
 })(MaritalStatus = exports.MaritalStatus || (exports.MaritalStatus = {}));
@@ -92,7 +78,9 @@ CivilianDTO.validator = common_1.JoiModelValidator.create({
     address: joi.string().min(1).max(200).allow(null).optional(),
     addressLat: joi.number().default(0).allow(null).optional(),
     addressLong: joi.number().default(0).allow(null).optional(),
-    maritalStatus: joi.string().only(MaritalStatus.SINGLE, MaritalStatus.DEVORCED, MaritalStatus.MARRIED, MaritalStatus.SEPARATED, MaritalStatus.WIDOWED).allow(null).optional(),
+    maritalStatus: joi.string()
+        .only(MaritalStatus.SINGLE, MaritalStatus.DEVORCED, MaritalStatus.MARRIED, MaritalStatus.SEPARATED, MaritalStatus.WIDOWED)
+        .allow(null).optional(),
     cityId: joi.string().allow(null).optional(),
 }, isSupportTenancy, false);
 CivilianDTO.translator = new common_1.ModelAutoMapper(CivilianDTO, CivilianDTO.validator);

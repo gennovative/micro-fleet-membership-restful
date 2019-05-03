@@ -20,7 +20,7 @@ class RoleDTO {
 }
 exports.RoleDTO = RoleDTO;
 RoleDTO.validator = common_1.JoiModelValidator.create({
-    name: joi.string().min(1).max(255).required()
+    name: joi.string().min(1).max(255).required(),
 }, isSupportTenancy, false);
 RoleDTO.translator = new common_1.ModelAutoMapper(RoleDTO, RoleDTO.validator);
 //# sourceMappingURL=RoleDTO.js.map

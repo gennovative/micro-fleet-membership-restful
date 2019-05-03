@@ -17,6 +17,7 @@ const joi = require("joi");
 const common_1 = require("@micro-fleet/common");
 const web_1 = require("@micro-fleet/web");
 const id_generator_1 = require("@micro-fleet/id-generator");
+const oauth_1 = require("@micro-fleet/oauth");
 const CivilianDTO_1 = require("../models/dto/CivilianDTO");
 const Types_1 = require("../constants/Types");
 let CivilianController = class CivilianController extends web_1.RestControllerBase {
@@ -52,7 +53,7 @@ let CivilianController = class CivilianController extends web_1.RestControllerBa
      */
     async create(req, res) {
         const dto = this.trans.merge(req['model'], {
-            id: this._idGen.nextBigInt().toString()
+            id: this._idGen.nextBigInt(),
         });
         const createdDto = await this.repo.create(dto);
         this.created(res, createdDto);
@@ -135,7 +136,7 @@ let CivilianController = class CivilianController extends web_1.RestControllerBa
             throw error;
         }
         const result = await this.repo.page(pageIndex, pageSize, {
-            sortBy, sortType
+            sortBy, sortType,
         });
         this.ok(res, result ? result.asObject() : new common_1.PagedArray());
     }
@@ -221,7 +222,7 @@ __decorate([
     web_1.decorators.PATCH('/'),
     web_1.decorators.model({
         ModelClass: CivilianDTO_1.CivilianDTO,
-        isPartial: true
+        isPartial: true,
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
@@ -236,7 +237,7 @@ __decorate([
 ], CivilianController.prototype, "update", null);
 CivilianController = __decorate([
     web_1.decorators.controller('civilians'),
-    web_1.decorators.authorized(),
+    oauth_1.authorized(),
     __param(0, common_1.inject(Types_1.Types.CIVILIAN_REPO)),
     __param(1, common_1.inject(id_generator_1.Types.ID_PROVIDER)),
     __metadata("design:paramtypes", [Object, id_generator_1.IdProviderAddOn])

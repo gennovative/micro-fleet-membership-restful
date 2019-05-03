@@ -21,7 +21,7 @@ class AccountEntity extends persistence_1.EntityBase {
         this.roleId = undefined;
         this.refreshToken = undefined;
         this.tokenExp = undefined;
-        // public civilianId: BigSInt = undefined;
+        // public civilianId: BigSInt = undefined
     }
     static get relationMappings() {
         // Lazy reference to avoid circular reference.
@@ -33,9 +33,9 @@ class AccountEntity extends persistence_1.EntityBase {
                 modelClass: RoleEntity,
                 join: {
                     from: 'public.accounts.role_id',
-                    to: 'public.account_roles.id'
-                }
-            }
+                    to: 'public.account_roles.id',
+                },
+            },
         };
     }
     /**

@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const common_1 = require("@micro-fleet/common");
+const oauth_1 = require("@micro-fleet/oauth");
 const web_1 = require("@micro-fleet/web");
 const LoginViewModel_1 = require("../models/view/LoginViewModel");
 const Types_1 = require("../constants/Types");
@@ -43,7 +44,7 @@ let AuthController = class AuthController extends web_1.RestControllerBase {
         };
         const [token, refreshToken] = await Promise.all([
             this._authAddon.createToken(payload, false),
-            this._authAddon.createToken(payload, true)
+            this._authAddon.createToken(payload, true),
         ]);
         const loggedAccount = await this.repo.patch({ id: account.id, refreshToken });
         if (loggedAccount) {
@@ -51,11 +52,11 @@ let AuthController = class AuthController extends web_1.RestControllerBase {
                 username: account.username,
                 role: account.role,
                 token: token,
-                refreshToken: refreshToken
+                refreshToken: refreshToken,
             });
         }
         return this.internalError(res, 'An error occured!');
-        //TODO: Should return only username, fullname and roles.
+        // TODO: Should return only username, fullname and roles.
     }
     async refreshToken(req, res) {
         const refreshToken = req.body.refreshToken;
@@ -88,8 +89,8 @@ __decorate([
 AuthController = __decorate([
     web_1.decorators.controller('auth'),
     __param(0, common_1.inject(Types_1.Types.ACCOUNT_REPO)),
-    __param(1, common_1.inject(web_1.Types.AUTH_ADDON)),
-    __metadata("design:paramtypes", [Object, web_1.AuthAddOn])
+    __param(1, common_1.inject(oauth_1.Types.AUTH_ADDON)),
+    __metadata("design:paramtypes", [Object, oauth_1.AuthAddOn])
 ], AuthController);
 exports.default = AuthController;
 //# sourceMappingURL=AuthController.js.map

@@ -25,51 +25,51 @@ let AccountRepository = class AccountRepository extends persistence_1.SoftDelRep
      * @override
      */
     async create(model, opts) {
-        let queryProm = this._processor.executeQuery((builder) => {
-            let query = builder
+        const queryProm = this._processor.executeQuery((builder) => {
+            const query = builder
                 .select('accounts.*', 'account_roles.name as role')
                 .leftOuterJoin('account_roles', 'accounts.role_id', 'account_roles.id')
                 .where('username', model.username)
                 .limit(1);
-            // console.log(query.toSQL());
+            // console.log(query.toSQL())
             return query;
         });
-        let account = await queryProm;
+        const account = await queryProm;
         if (!account[0]) {
             const passBuffer = await this._hash(model.password);
             const password = passBuffer.toString('base64');
             model = AccountDTO_1.AccountDTO.translator.merge(model, {
-                password
+                password,
             });
             return await super.create(model, opts);
         }
         return null;
     }
     async findByCredentials(username, password) {
-        let queryProm = this._processor.executeQuery((builder) => {
-            let query = builder
+        const queryProm = this._processor.executeQuery((builder) => {
+            const query = builder
                 .select('accounts.*', 'account_roles.name as role')
                 .leftOuterJoin('account_roles', 'accounts.role_id', 'account_roles.id')
                 .where('username', username)
                 .limit(1);
-            // console.log(query.toSQL());
+            // console.log(query.toSQL())
             return query;
         });
         const account = await queryProm;
         if (account[0]) {
             const passBuffer = Buffer.from(account[0].password, 'base64');
             const isMatched = await this._verify(passBuffer, password);
-            let accoutnDto = this._processor.toDTO(account[0], false);
-            accoutnDto.role = account[0]['role'];
+            const accoutnDto = this._processor.toDTO(account[0], false);
+            accoutnDto['role'] = account[0]['role'];
             return (isMatched ? accoutnDto : null);
         }
         return null;
     }
     async checkRefresh(id, refreshToken) {
-        let queryProm = this._processor.executeQuery((builder) => {
-            let query = builder.where({
+        const queryProm = this._processor.executeQuery((builder) => {
+            const query = builder.where({
                 refresh_token: refreshToken,
-                id: id
+                id: id,
             }).limit(1);
             return query;
         });
@@ -77,7 +77,7 @@ let AccountRepository = class AccountRepository extends persistence_1.SoftDelRep
         return (account && account[0]);
     }
     async _hash(password) {
-        let params = await scrypt.params(0.1);
+        const params = await scrypt.params(0.1);
         return await scrypt.kdf(password, params);
     }
     _verify(kdf, key) {
@@ -86,10 +86,8 @@ let AccountRepository = class AccountRepository extends persistence_1.SoftDelRep
     async changePassword(id, password) {
         const passBuffer = await this._hash(password);
         const passStr = passBuffer.toString('base64');
-        return this.patch({ id, password: passStr })
-            .then((props) => {
-            return (!!props);
-        });
+        const props = await this.patch({ id, password: passStr });
+        return !!props;
     }
 };
 AccountRepository = __decorate([
